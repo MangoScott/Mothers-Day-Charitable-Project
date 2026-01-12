@@ -4,16 +4,6 @@
 /* Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* Design System - Clean and Modern like scottglasgow.com */
-:root {
-  --bg: #fafafa;
-  --surface: #f5f5f5;
-  --text: #1a1a1a;
-  --muted: #666;
-  --accent: #E87B7B;
-  --border: rgba(0, 0, 0, 0.08);
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -22,171 +12,27 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  background: #fafafa;
+  color: #1a1a1a;
   line-height: 1.6;
-  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Typography */
-h1,
-h2,
-h3,
-h4 {
-  font-weight: 700;
-  line-height: 1.2;
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Container */
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-/* Card */
-.card {
-  background: white;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  transition: all 0.2s ease;
-}
-
-.card:hover {
-  border-color: var(--text);
-  transform: translateY(-2px);
-}
-
-/* Button Primary */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 16px 32px;
-  border-radius: 100px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-  text-decoration: none;
-}
-
-.btn-primary {
-  background: var(--text);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: #333;
-  transform: translateY(-2px);
-}
-
-.btn-outline {
+::-webkit-scrollbar-track {
   background: transparent;
-  color: var(--text);
-  border: 2px solid var(--text);
 }
 
-.btn-outline:hover {
-  background: var(--text);
-  color: white;
+::-webkit-scrollbar-thumb {
+  background: #ec4899;
+  border-radius: 4px;
 }
 
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  transform: none !important;
-}
-
-/* Slot Item */
-.slot-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  transition: all 0.2s ease;
-}
-
-.slot-item:hover {
-  border-color: var(--accent);
-}
-
-.slot-item.completed {
-  background: linear-gradient(to right, rgba(232, 123, 123, 0.05), white);
-  border-color: var(--accent);
-}
-
-/* Badge */
-.badge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: var(--text);
-  color: white;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 13px;
-  flex-shrink: 0;
-}
-
-.badge-accent {
-  background: var(--accent);
-}
-
-/* Upload Button */
-.upload-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: var(--surface);
-  color: var(--text);
-  border: none;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.upload-btn:hover {
-  background: var(--text);
-  color: white;
-}
-
-/* Thumbnail */
-.thumbnail {
-  width: 64px;
-  height: 42px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 2px solid white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Progress */
-.progress-track {
-  height: 6px;
-  background: var(--surface);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 3px;
-  transition: width 0.3s ease;
-}
-
-/* Floating Hearts Animation */
+/* Floating Hearts */
 .floating-hearts-container {
   position: fixed;
   top: 0;
@@ -200,9 +46,7 @@ h4 {
 
 .floating-heart {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  background: var(--accent);
+  background: #ec4899;
   opacity: 0.1;
   border-radius: 50%;
   animation: float-up 15s infinite ease-in-out;
@@ -212,20 +56,20 @@ h4 {
 .floating-heart::after {
   content: '';
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 100%;
+  height: 100%;
   background: inherit;
   border-radius: 50%;
 }
 
 .floating-heart::before {
-  top: -10px;
+  top: -50%;
   left: 0;
 }
 
 .floating-heart::after {
   top: 0;
-  left: -10px;
+  left: -50%;
 }
 
 @keyframes float-up {
@@ -245,44 +89,5 @@ h4 {
   100% {
     transform: translateY(-100px) rotate(360deg) scale(1);
     opacity: 0;
-  }
-}
-
-/* Feature tag */
-.feature-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  background: var(--surface);
-  border-radius: 100px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--muted);
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 4px;
-}
-
-/* Responsive */
-@media (max-width: 640px) {
-  .btn {
-    padding: 14px 24px;
-    font-size: 0.9rem;
-  }
-
-  .slot-item {
-    padding: 14px 16px;
   }
 }
