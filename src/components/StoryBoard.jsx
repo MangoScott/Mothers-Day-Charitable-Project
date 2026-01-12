@@ -50,7 +50,7 @@ const StoryBoard = () => {
             </header>
 
             {/* Content */}
-            <main className="w-full max-w-6xl mx-auto px-6 py-8 pb-32 flex-grow">
+            <main className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 pb-40 flex-grow">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {lyricSlots.map((slot, index) => (
                         <LyricSlot key={slot.id} slot={slot} index={index} />
@@ -59,12 +59,12 @@ const StoryBoard = () => {
             </main>
 
             {/* Fixed Bottom */}
-            <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 z-20 shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
-                <div className="w-full max-w-4xl mx-auto flex gap-4">
+            <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
+                <div className="w-full max-w-4xl mx-auto flex flex-col sm:flex-row gap-3">
                     <button
                         onClick={() => setScreen('preview')}
                         disabled={!hasAnyPhotos}
-                        className="flex-1 flex items-center justify-center gap-2 py-4 px-6 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 hover:border-gray-300 hover:text-gray-900 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 hover:border-gray-300 hover:text-gray-900 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -75,7 +75,7 @@ const StoryBoard = () => {
                     <button
                         onClick={() => setScreen('rendering')}
                         disabled={!hasAllPhotos}
-                        className="flex-1 flex items-center justify-center gap-2 py-4 px-6 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 hover:shadow-lg hover:scale-[1.02] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+                        className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 hover:shadow-lg hover:scale-[1.02] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

@@ -37,10 +37,10 @@ const LyricSlot = ({ slot, index }) => {
         <div className="relative w-full aspect-video group">
             {/* Main Card Area */}
             <div
-                className={`w-full h-full rounded-xl overflow-hidden border-2 transition-all cursor-pointer relative
+                className={`w-full h-full rounded-xl overflow-hidden transition-all cursor-pointer relative
           ${hasPhoto
-                        ? 'border-gray-900 shadow-md'
-                        : 'border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 hover:border-gray-400'
+                        ? 'border-2 border-gray-900 shadow-md'
+                        : 'border-4 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 hover:border-gray-400'
                     }
         `}
                 onClick={() => !hasPhoto && fileInputRef.current?.click()}
@@ -79,8 +79,8 @@ const LyricSlot = ({ slot, index }) => {
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-400"></div>
                         ) : (
                             <>
-                                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center mb-1">
-                                    <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-1">
+                                    <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
                                     </svg>
                                 </div>
@@ -105,9 +105,12 @@ const LyricSlot = ({ slot, index }) => {
                 </div>
 
                 {/* Badge Top Left */}
-                <div className="absolute top-3 left-3 pointer-events-none">
-                    <span className={`text-xs font-bold px-2 py-1 rounded-md shadow-sm
-            ${hasPhoto ? 'bg-white text-gray-900' : 'bg-gray-200 text-gray-500'}
+                <div className="absolute top-3 left-3 pointer-events-none z-10">
+                    <span className={`text-xs font-bold px-2.5 py-1.5 rounded-md shadow-sm border
+            ${hasPhoto
+                            ? 'bg-white text-gray-900 border-transparent'
+                            : 'bg-white text-gray-500 border-gray-200'
+                        }
           `}>
                         {getLabel()}
                     </span>
