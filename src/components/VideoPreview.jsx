@@ -5,6 +5,7 @@ import { lyricSlots, getCurrentSlot, getSlotProgress, SONG_DURATION } from '../u
 const VideoPreview = () => {
     const setScreen = useVideoStore((state) => state.setScreen);
     const photos = useVideoStore((state) => state.photos);
+    const customTitle = useVideoStore((state) => state.customTitle);
     const canvasRef = useRef(null);
     const audioRef = useRef(null);
     const animationRef = useRef(null);
@@ -240,8 +241,8 @@ const VideoPreview = () => {
             ctx.fillText('No photo for this scene', width / 2, height / 2);
         }
 
-        // Draw lyric overlay
-        const lyric = slot.lyric;
+        // Draw lyric overlay - use customTitle for editable slots
+        const lyric = slot.editable ? customTitle : slot.lyric;
 
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         ctx.fillRect(0, height - 100, width, 100);
@@ -276,7 +277,7 @@ const VideoPreview = () => {
             ctx.fillText(`"${text}"`, width / 2, y);
             y += lineHeight;
         }
-    }, [loadedImages]);
+    }, [loadedImages, customTitle]);
 
     const animate = useCallback(() => {
         if (!audioRef.current) return;
@@ -383,7 +384,7 @@ const VideoPreview = () => {
 
                     <div style={styles.lyricIndicator}>
                         <span style={styles.lyricLabel}>Now showing:</span>
-                        <p style={styles.lyricText}>"{currentSlot?.lyric}"</p>
+                        <p style={styles.lyricText}>"{currentSlot?.editable ? customTitle : currentSlot?.lyric}"</p>
                     </div>
                 </div>
 

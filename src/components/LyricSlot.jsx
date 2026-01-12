@@ -1,12 +1,15 @@
-import { Image, X } from 'lucide-react';
+import { Image, X, Edit3 } from 'lucide-react';
 import useVideoStore from '../store/useVideoStore';
 
 export default function LyricSlot({ slot, index }) {
     const setPhoto = useVideoStore((state) => state.setPhoto);
     const removePhoto = useVideoStore((state) => state.removePhoto);
     const getPhotoForSlot = useVideoStore((state) => state.getPhotoForSlot);
+    const customTitle = useVideoStore((state) => state.customTitle);
+    const setCustomTitle = useVideoStore((state) => state.setCustomTitle);
 
     const imageUrl = getPhotoForSlot(slot.id);
+    const isEditable = slot.editable === true;
 
     const handleFileUpload = (e) => {
         const file = e.target.files?.[0];
@@ -21,6 +24,10 @@ export default function LyricSlot({ slot, index }) {
 
     const handleRemoveImage = () => {
         removePhoto(slot.id);
+    };
+
+    const handleTitleChange = (e) => {
+        setCustomTitle(e.target.value);
     };
 
     const styles = {
@@ -128,6 +135,35 @@ export default function LyricSlot({ slot, index }) {
             lineHeight: 1.6,
             margin: 0,
         },
+        titleInputWrapper: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+        },
+        titleInput: {
+            flex: 1,
+            fontSize: '0.9375rem',
+            color: '#111827',
+            fontWeight: '600',
+            padding: '10px 14px',
+            border: '2px solid #fce7f3',
+            borderRadius: '10px',
+            background: '#fdf2f8',
+            outline: 'none',
+            transition: 'all 0.2s ease',
+        },
+        editIcon: {
+            color: '#ec4899',
+            flexShrink: 0,
+        },
+        editHint: {
+            fontSize: '0.75rem',
+            color: '#9ca3af',
+            marginTop: '6px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+        },
     };
 
     return (
@@ -207,9 +243,35 @@ export default function LyricSlot({ slot, index }) {
                 )}
             </div>
 
-            {/* Lyrics */}
+            {/* Lyrics or Editable Title */}
             <div style={styles.lyrics}>
-                <p style={styles.lyricsText}>"{slot.lyric}"</p>
+                {isEditable ? (
+                    <>
+                        <div style={styles.titleInputWrapper}>
+                            <Edit3 style={{ ...styles.editIcon, width: 16, height: 16 }} />
+                            <input
+                                type="text"
+                                value={customTitle}
+                                onChange={handleTitleChange}
+                                placeholder="Enter your title..."
+                                style={styles.titleInput}
+                                onFocus={(e) => {
+                                    e.target.style.borderColor = '#ec4899';
+                                    e.target.style.background = '#fff';
+                                }}
+                                onBlur={(e) => {
+                                    e.target.style.borderColor = '#fce7f3';
+                                    e.target.style.background = '#fdf2f8';
+                                }}
+                            />
+                        </div>
+                        <p style={styles.editHint}>
+                            ✨ This title will appear as the opening text in your video
+                        </p>
+                    </>
+                ) : (
+                    <p style={styles.lyricsText}>"{slot.lyric}"</p>
+                )}
             </div>
         </div>
     );

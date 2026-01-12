@@ -14,6 +14,9 @@ const useVideoStore = create((set, get) => ({
     // Photos mapped by slot ID
     photos: initialPhotos,
 
+    // Custom title for the title card (slot 1)
+    customTitle: 'A Tribute to Mom ❤️',
+
     // Rendering state
     isGenerating: false,
     progress: 0,
@@ -25,6 +28,8 @@ const useVideoStore = create((set, get) => ({
 
     // Actions
     setScreen: (screen) => set({ currentScreen: screen }),
+
+    setCustomTitle: (title) => set({ customTitle: title }),
 
     setPhoto: (slotId, photoData) => set((state) => ({
         photos: { ...state.photos, [slotId]: photoData }

@@ -6,6 +6,7 @@ import { generateVideo, downloadBlob } from '../utils/ffmpegHelper';
 const VideoRenderer = () => {
     const setScreen = useVideoStore((state) => state.setScreen);
     const photos = useVideoStore((state) => state.photos);
+    const customTitle = useVideoStore((state) => state.customTitle);
     const [status, setStatus] = useState('preparing');
     const [error, setError] = useState(null);
     const [progress, setProgress] = useState(0);
@@ -135,7 +136,8 @@ const VideoRenderer = () => {
 
             const images = lyricSlots.map((slot) => ({
                 dataUrl: photos[slot.id],
-                lyric: slot.lyric,
+                // Use customTitle for editable slots (title card)
+                lyric: slot.editable ? customTitle : slot.lyric,
                 duration: slot.displayDuration,
             }));
 
@@ -151,7 +153,7 @@ const VideoRenderer = () => {
             setError(err.message || 'Failed to generate video');
             setStatus('error');
         }
-    }, [photos]);
+    }, [photos, customTitle]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
