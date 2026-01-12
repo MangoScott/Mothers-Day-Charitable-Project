@@ -1,83 +1,269 @@
-import React from 'react';
+import { ArrowLeft, Eye } from 'lucide-react';
 import useVideoStore from '../store/useVideoStore';
-import { lyricSlots, TOTAL_SLOTS } from '../utils/lyricsData';
 import LyricSlot from './LyricSlot';
+import { lyricSlots } from '../utils/lyricsData';
 
-const StoryBoard = () => {
-    const { setScreen, photos } = useVideoStore();
+export default function StoryBoard() {
+    const photos = useVideoStore((state) => state.photos);
+    const getUploadedCount = useVideoStore((state) => state.getUploadedCount);
+    const hasAllPhotosFunc = useVideoStore((state) => state.hasAllPhotos);
 
-    const uploadedCount = Object.values(photos).filter(Boolean).length;
-    const progressPercent = (uploadedCount / TOTAL_SLOTS) * 100;
-    const hasAnyPhotos = uploadedCount > 0;
-    const hasAllPhotos = uploadedCount === TOTAL_SLOTS;
+    const progress = getUploadedCount();
+    const hasAllPhotos = hasAllPhotosFunc();
+    const slots = lyricSlots;
+
+    const handleGoBack = () => {
+        useVideoStore.setState({ currentScreen: 'landing' });
+    };
+
+    const handlePreview = () => {
+        useVideoStore.setState({ currentScreen: 'preview' });
+    };
+
+    const handleGenerate = () => {
+        if (hasAllPhotos) {
+            useVideoStore.setState({ currentScreen: 'rendering' });
+        }
+    };
+
+    const styles = {
+        container: {
+            minHeight: '100vh',
+            background: 'linear-gradient(180deg, #fdf2f8 0%, #ffffff 100%)',
+        },
+        header: {
+            position: 'sticky',
+            top: 0,
+            zIndex: 20,
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(12px)',
+            borderBottom: '1px solid #f3f4f6',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
+        },
+        headerInner: {
+            maxWidth: '1280px',
+            margin: '0 auto',
+            padding: '20px 24px',
+        },
+        headerTop: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '16px',
+        },
+        headerLeft: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '20px',
+        },
+        backButton: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '10px 16px',
+            background: 'white',
+            border: '1px solid #e5e7eb',
+            borderRadius: '12px',
+            color: '#374151',
+            fontWeight: '500',
+            fontSize: '14px',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+        },
+        titleBlock: {},
+        title: {
+            fontSize: '1.75rem',
+            fontWeight: '700',
+            color: '#111827',
+            margin: 0,
+        },
+        subtitle: {
+            fontSize: '0.875rem',
+            color: '#6b7280',
+            margin: '4px 0 0 0',
+        },
+        progressBlock: {
+            textAlign: 'right',
+        },
+        progressLabel: {
+            fontSize: '0.875rem',
+            color: '#6b7280',
+            margin: '0 0 4px 0',
+        },
+        progressCount: {
+            fontSize: '2rem',
+            fontWeight: '700',
+            background: 'linear-gradient(135deg, #ec4899, #f43f5e)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            margin: 0,
+        },
+        progressBar: {
+            height: '8px',
+            background: '#f3f4f6',
+            borderRadius: '9999px',
+            overflow: 'hidden',
+        },
+        progressFill: {
+            height: '100%',
+            background: 'linear-gradient(90deg, #ec4899, #f43f5e)',
+            borderRadius: '9999px',
+            transition: 'width 0.4s ease',
+        },
+        main: {
+            maxWidth: '1280px',
+            margin: '0 auto',
+            padding: '40px 24px 120px',
+        },
+        grid: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+            gap: '24px',
+        },
+        actionBar: {
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 20,
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(12px)',
+            borderTop: '1px solid #f3f4f6',
+            boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.05)',
+        },
+        actionBarInner: {
+            maxWidth: '1280px',
+            margin: '0 auto',
+            padding: '20px 24px',
+            display: 'flex',
+            gap: '16px',
+            justifyContent: 'center',
+        },
+        previewButton: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            padding: '16px 28px',
+            background: 'white',
+            border: '2px solid #e5e7eb',
+            borderRadius: '14px',
+            color: '#374151',
+            fontWeight: '600',
+            fontSize: '1rem',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+        },
+        generateButton: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            padding: '16px 32px',
+            background: hasAllPhotos
+                ? 'linear-gradient(135deg, #ec4899, #f43f5e)'
+                : '#e5e7eb',
+            border: 'none',
+            borderRadius: '14px',
+            color: hasAllPhotos ? 'white' : '#9ca3af',
+            fontWeight: '600',
+            fontSize: '1rem',
+            cursor: hasAllPhotos ? 'pointer' : 'not-allowed',
+            boxShadow: hasAllPhotos ? '0 10px 30px rgba(236, 72, 153, 0.3)' : 'none',
+            transition: 'all 0.2s ease',
+        },
+    };
 
     return (
-        <div className="min-h-screen bg-white flex flex-col">
+        <div style={styles.container}>
             {/* Header */}
-            <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-gray-100">
-                <div className="w-full max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => setScreen('landing')}
-                            className="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-100 hover:text-gray-900 text-gray-500 flex items-center justify-center transition-all border border-transparent hover:border-gray-200"
-                            title="Go Back"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-                        <div>
-                            <h1 className="text-xl font-bold text-gray-900 tracking-tight">Your Storyboard</h1>
+            <header style={styles.header}>
+                <div style={styles.headerInner}>
+                    <div style={styles.headerTop}>
+                        <div style={styles.headerLeft}>
+                            <button
+                                onClick={handleGoBack}
+                                style={styles.backButton}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = '#f9fafb';
+                                    e.currentTarget.style.borderColor = '#d1d5db';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = 'white';
+                                    e.currentTarget.style.borderColor = '#e5e7eb';
+                                }}
+                            >
+                                <ArrowLeft style={{ width: 18, height: 18 }} />
+                                Back
+                            </button>
+                            <div style={styles.titleBlock}>
+                                <h1 style={styles.title}>Your Storyboard</h1>
+                                <p style={styles.subtitle}>Add photos to bring your story to life</p>
+                            </div>
+                        </div>
+                        <div style={styles.progressBlock}>
+                            <p style={styles.progressLabel}>Progress</p>
+                            <p style={styles.progressCount}>{progress}/14</p>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <div className="text-right hidden sm:block">
-                            <span className="text-sm font-semibold text-gray-500 mr-2">Progress</span>
-                            <span className="text-xl font-bold text-gray-900">
-                                {uploadedCount}<span className="text-gray-300 font-normal">/</span>{TOTAL_SLOTS}
-                            </span>
-                        </div>
-                        {/* Circular Progress (Mobile) / Bar (Desktop) */}
-                        <div className="w-32 h-2.5 bg-gray-100 rounded-full overflow-hidden hidden sm:block">
-                            <div
-                                className="h-full bg-gray-900 rounded-full transition-all duration-500 ease-out"
-                                style={{ width: `${progressPercent}%` }}
-                            />
-                        </div>
+                    {/* Progress Bar */}
+                    <div style={styles.progressBar}>
+                        <div
+                            style={{
+                                ...styles.progressFill,
+                                width: `${(progress / 14) * 100}%`
+                            }}
+                        />
                     </div>
                 </div>
             </header>
 
-            {/* Content */}
-            <main className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 pb-40 flex-grow">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {lyricSlots.map((slot, index) => (
+            {/* Photo Grid */}
+            <main style={styles.main}>
+                <div style={styles.grid}>
+                    {slots.map((slot, index) => (
                         <LyricSlot key={slot.id} slot={slot} index={index} />
                     ))}
                 </div>
             </main>
 
-            {/* Fixed Bottom */}
-            <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 z-30 shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
-                <div className="w-full max-w-4xl mx-auto flex flex-col sm:flex-row gap-3">
+            {/* Action Bar */}
+            <footer style={styles.actionBar}>
+                <div style={styles.actionBarInner}>
                     <button
-                        onClick={() => setScreen('preview')}
-                        disabled={!hasAnyPhotos}
-                        className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-white border border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 hover:border-gray-300 hover:text-gray-900 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                        onClick={handlePreview}
+                        style={styles.previewButton}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.background = '#f9fafb';
+                            e.currentTarget.style.borderColor = '#d1d5db';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'white';
+                            e.currentTarget.style.borderColor = '#e5e7eb';
+                        }}
                     >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        </svg>
+                        <Eye style={{ width: 20, height: 20 }} />
                         Preview Video
                     </button>
 
                     <button
-                        onClick={() => setScreen('rendering')}
+                        onClick={handleGenerate}
                         disabled={!hasAllPhotos}
-                        className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 hover:shadow-lg hover:scale-[1.02] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+                        style={styles.generateButton}
+                        onMouseEnter={(e) => {
+                            if (hasAllPhotos) {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = '0 14px 40px rgba(236, 72, 153, 0.4)';
+                            }
+                        }}
+                        onMouseLeave={(e) => {
+                            if (hasAllPhotos) {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = '0 10px 30px rgba(236, 72, 153, 0.3)';
+                            }
+                        }}
                     >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                         </svg>
                         Generate & Download
@@ -86,6 +272,4 @@ const StoryBoard = () => {
             </footer>
         </div>
     );
-};
-
-export default StoryBoard;
+}

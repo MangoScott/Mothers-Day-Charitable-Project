@@ -32,15 +32,15 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 py-8 text-center">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-[#E8A87C]" />
-          <p className="text-sm text-[#8A847E]">
+      <footer className="relative z-10 py-12 text-center">
+        <div className="flex items-center justify-center gap-3 mb-3">
+          <div className="w-2 h-2 rounded-full bg-gradient-to-r from-pink-400 to-rose-400 animate-gentle-pulse" />
+          <p className="text-sm font-medium text-gray-600">
             Made with love for moms everywhere
           </p>
-          <div className="w-1.5 h-1.5 rounded-full bg-[#C38D94]" />
+          <div className="w-2 h-2 rounded-full bg-gradient-to-r from-rose-400 to-pink-400 animate-gentle-pulse" />
         </div>
-        <p className="text-xs text-[#8A847E]/70">
+        <p className="text-xs text-gray-500 font-medium">
           The Wendy's Song Project — A Charitable Initiative
         </p>
       </footer>
