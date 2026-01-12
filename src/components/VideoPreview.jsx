@@ -3,7 +3,8 @@ import useVideoStore from '../store/useVideoStore';
 import { lyricSlots, getCurrentSlot, getSlotProgress, SONG_DURATION } from '../utils/lyricsData';
 
 const VideoPreview = () => {
-    const { setScreen, photos } = useVideoStore();
+    const setScreen = useVideoStore((state) => state.setScreen);
+    const photos = useVideoStore((state) => state.photos);
     const canvasRef = useRef(null);
     const audioRef = useRef(null);
     const animationRef = useRef(null);
@@ -11,6 +12,154 @@ const VideoPreview = () => {
     const [currentTime, setCurrentTime] = useState(0);
     const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
     const [loadedImages, setLoadedImages] = useState({});
+
+    const styles = {
+        container: {
+            minHeight: '100vh',
+            padding: '24px 16px',
+            background: 'linear-gradient(180deg, #fdf2f8 0%, #ffffff 100%)',
+        },
+        inner: {
+            maxWidth: '900px',
+            margin: '0 auto',
+        },
+        header: {
+            background: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(12px)',
+            borderRadius: '20px',
+            padding: '20px 24px',
+            marginBottom: '24px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
+            border: '1px solid #f3f4f6',
+        },
+        backButton: {
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            fontSize: '0.875rem',
+            color: '#6b7280',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            marginBottom: '8px',
+            padding: 0,
+        },
+        title: {
+            fontSize: '1.75rem',
+            fontWeight: '700',
+            color: '#111827',
+            margin: 0,
+        },
+        videoCard: {
+            background: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(12px)',
+            borderRadius: '20px',
+            padding: '24px',
+            marginBottom: '24px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
+            border: '1px solid #f3f4f6',
+        },
+        canvasWrapper: {
+            aspectRatio: '16 / 9',
+            background: '#fdf2f8',
+            borderRadius: '16px',
+            overflow: 'hidden',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
+        },
+        canvas: {
+            width: '100%',
+            height: '100%',
+            display: 'block',
+        },
+        lyricIndicator: {
+            marginTop: '16px',
+            textAlign: 'center',
+        },
+        lyricLabel: {
+            fontSize: '0.75rem',
+            color: '#9ca3af',
+            fontWeight: '500',
+        },
+        lyricText: {
+            fontSize: '1.125rem',
+            color: '#374151',
+            fontStyle: 'italic',
+            marginTop: '4px',
+        },
+        controlsCard: {
+            background: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(12px)',
+            borderRadius: '20px',
+            padding: '24px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
+            border: '1px solid #f3f4f6',
+        },
+        progressBar: {
+            height: '8px',
+            background: '#f3f4f6',
+            borderRadius: '9999px',
+            overflow: 'hidden',
+            cursor: 'pointer',
+            marginBottom: '16px',
+        },
+        progressFill: {
+            height: '100%',
+            background: 'linear-gradient(90deg, #ec4899, #f43f5e)',
+            borderRadius: '9999px',
+            transition: 'width 0.1s ease',
+        },
+        timeRow: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            fontSize: '0.875rem',
+            color: '#6b7280',
+            marginBottom: '20px',
+        },
+        buttonRow: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '16px',
+        },
+        controlButton: {
+            width: '48px',
+            height: '48px',
+            borderRadius: '50%',
+            background: 'white',
+            border: '1px solid #e5e7eb',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+        },
+        playButton: {
+            width: '64px',
+            height: '64px',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, #ec4899, #f43f5e)',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 8px 20px rgba(236, 72, 153, 0.3)',
+            transition: 'all 0.2s ease',
+        },
+        generateButton: {
+            width: '48px',
+            height: '48px',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, #10b981, #059669)',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+            transition: 'all 0.2s ease',
+        },
+    };
 
     // Preload all images
     useEffect(() => {
@@ -41,62 +190,70 @@ const VideoPreview = () => {
         const width = canvas.width;
         const height = canvas.height;
 
-        // Get current slot
         const slot = getCurrentSlot(time);
         const slotIndex = lyricSlots.findIndex((s) => s.id === slot.id);
         setCurrentSlotIndex(slotIndex);
 
-        // Clear canvas
-        ctx.fillStyle = '#FFF8E7';
+        // Clear canvas with gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, height);
+        gradient.addColorStop(0, '#fdf2f8');
+        gradient.addColorStop(1, '#fce7f3');
+        ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, width, height);
 
-        // Draw image if available
         const img = loadedImages[slot.id];
         if (img) {
-            // Calculate fade progress for transitions
             const slotProgress = getSlotProgress(time, slot);
             let opacity = 1;
 
-            // Fade in at start of slot
             if (slotProgress < 0.1) {
                 opacity = slotProgress / 0.1;
-            }
-            // Fade out at end of slot
-            else if (slotProgress > 0.9) {
+            } else if (slotProgress > 0.9) {
                 opacity = (1 - slotProgress) / 0.1;
             }
 
             ctx.globalAlpha = opacity;
-            ctx.drawImage(img, 0, 0, width, height);
+
+            // Cover the canvas while maintaining aspect ratio
+            const imgAspect = img.width / img.height;
+            const canvasAspect = width / height;
+            let drawWidth, drawHeight, drawX, drawY;
+
+            if (imgAspect > canvasAspect) {
+                drawHeight = height;
+                drawWidth = height * imgAspect;
+                drawX = (width - drawWidth) / 2;
+                drawY = 0;
+            } else {
+                drawWidth = width;
+                drawHeight = width / imgAspect;
+                drawX = 0;
+                drawY = (height - drawHeight) / 2;
+            }
+
+            ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
             ctx.globalAlpha = 1;
         } else {
-            // Draw placeholder
-            ctx.fillStyle = '#F8E1E7';
-            ctx.fillRect(0, 0, width, height);
-            ctx.fillStyle = '#D4A5A5';
-            ctx.font = '24px Inter';
+            ctx.fillStyle = '#d1d5db';
+            ctx.font = 'bold 24px Inter, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('No photo for this slot', width / 2, height / 2);
+            ctx.fillText('No photo for this scene', width / 2, height / 2);
         }
 
-        // Draw lyric text overlay
+        // Draw lyric overlay
         const lyric = slot.lyric;
 
-        // Semi-transparent background bar for text
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         ctx.fillRect(0, height - 100, width, 100);
 
-        // Draw text
         ctx.fillStyle = '#FFFFFF';
-        ctx.font = 'italic 28px Playfair Display, Georgia, serif';
+        ctx.font = 'italic 28px Georgia, serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        // Word wrap if needed
         const maxWidth = width - 80;
         const words = lyric.split(' ');
         let line = '';
-        let y = height - 60;
         const lineHeight = 36;
         const lines = [];
 
@@ -112,9 +269,8 @@ const VideoPreview = () => {
         }
         lines.push(line.trim());
 
-        // Center lines vertically
         const totalHeight = lines.length * lineHeight;
-        y = height - 50 - totalHeight / 2;
+        let y = height - 50 - totalHeight / 2;
 
         for (const text of lines) {
             ctx.fillText(`"${text}"`, width / 2, y);
@@ -145,7 +301,6 @@ const VideoPreview = () => {
         };
     }, [isPlaying, animate]);
 
-    // Initial draw
     useEffect(() => {
         if (Object.keys(loadedImages).length > 0) {
             drawFrame(0);
@@ -161,7 +316,6 @@ const VideoPreview = () => {
         } else {
             audioRef.current.play().catch((e) => {
                 console.warn('Audio playback failed:', e);
-                // Continue without audio
             });
             setIsPlaying(true);
         }
@@ -197,91 +351,77 @@ const VideoPreview = () => {
     };
 
     const currentSlot = lyricSlots[currentSlotIndex];
+    const audioPath = import.meta.env.BASE_URL + 'audio/wendys_song.mp3';
 
     return (
-        <div className="min-h-screen px-4 py-6 md:py-8">
-            <div className="max-w-4xl mx-auto">
+        <div style={styles.container}>
+            <div style={styles.inner}>
                 {/* Header */}
-                <div className="glass-card rounded-2xl p-4 md:p-6 mb-6 animate-fade-in">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <button
-                                onClick={() => setScreen('storyboard')}
-                                className="text-accent hover:text-warm transition-colors text-sm flex items-center gap-1 mb-2"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                                </svg>
-                                Back to Story Board
-                            </button>
-                            <h1 className="text-2xl md:text-3xl font-serif text-warm">
-                                Preview Your Video
-                            </h1>
-                        </div>
-                    </div>
+                <div style={styles.header}>
+                    <button
+                        onClick={() => setScreen('storyboard')}
+                        style={styles.backButton}
+                    >
+                        <svg style={{ width: 16, height: 16 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Back to Storyboard
+                    </button>
+                    <h1 style={styles.title}>Preview Your Video</h1>
                 </div>
 
-                {/* Video canvas */}
-                <div className="glass-card rounded-2xl p-4 md:p-6 mb-6 animate-slide-up">
-                    <div className="aspect-video bg-cream-100 rounded-xl overflow-hidden shadow-lg">
+                {/* Video Canvas */}
+                <div style={styles.videoCard}>
+                    <div style={styles.canvasWrapper}>
                         <canvas
                             ref={canvasRef}
                             width={1280}
                             height={720}
-                            className="video-canvas w-full h-full"
+                            style={styles.canvas}
                         />
                     </div>
 
-                    {/* Current lyric indicator */}
-                    <div className="mt-4 text-center">
-                        <span className="text-xs text-accent font-medium">Now showing:</span>
-                        <p className="font-serif text-lg text-warm italic mt-1">
-                            "{currentSlot?.lyric}"
-                        </p>
+                    <div style={styles.lyricIndicator}>
+                        <span style={styles.lyricLabel}>Now showing:</span>
+                        <p style={styles.lyricText}>"{currentSlot?.lyric}"</p>
                     </div>
                 </div>
 
                 {/* Controls */}
-                <div className="glass-card rounded-2xl p-4 md:p-6 animate-slide-up">
-                    {/* Progress bar */}
+                <div style={styles.controlsCard}>
                     <div
-                        className="h-2 bg-white/70 rounded-full overflow-hidden cursor-pointer mb-4"
+                        style={styles.progressBar}
                         onClick={handleSeek}
                     >
-                        <div
-                            className="progress-bar"
-                            style={{ width: `${(currentTime / SONG_DURATION) * 100}%` }}
-                        />
+                        <div style={{ ...styles.progressFill, width: `${(currentTime / SONG_DURATION) * 100}%` }} />
                     </div>
 
-                    {/* Time display */}
-                    <div className="flex justify-between text-sm text-warm/70 mb-4">
+                    <div style={styles.timeRow}>
                         <span>{formatTime(currentTime)}</span>
                         <span>{formatTime(SONG_DURATION)}</span>
                     </div>
 
-                    {/* Control buttons */}
-                    <div className="flex justify-center gap-4">
+                    <div style={styles.buttonRow}>
                         <button
                             onClick={handleReset}
-                            className="p-3 rounded-full bg-white/70 text-warm hover:bg-white transition-colors"
+                            style={styles.controlButton}
                             title="Reset"
                         >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg style={{ width: 20, height: 20, color: '#374151' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
                         </button>
 
                         <button
                             onClick={handlePlayPause}
-                            className="p-4 rounded-full bg-gradient-to-r from-highlight to-accent text-white hover:shadow-lg transition-all"
+                            style={styles.playButton}
                         >
                             {isPlaying ? (
-                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <svg style={{ width: 28, height: 28, color: 'white' }} fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
                                 </svg>
                             ) : (
-                                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <svg style={{ width: 28, height: 28, color: 'white', marginLeft: 4 }} fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M8 5v14l11-7z" />
                                 </svg>
                             )}
@@ -289,20 +429,20 @@ const VideoPreview = () => {
 
                         <button
                             onClick={() => setScreen('rendering')}
-                            className="p-3 rounded-full bg-accent text-white hover:bg-accent/80 transition-colors"
+                            style={styles.generateButton}
                             title="Generate Video"
                         >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg style={{ width: 20, height: 20, color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
                         </button>
                     </div>
                 </div>
 
-                {/* Hidden audio element */}
+                {/* Audio Element */}
                 <audio
                     ref={audioRef}
-                    src="/audio/wendys_song.mp3"
+                    src={audioPath}
                     onEnded={handleReset}
                     onTimeUpdate={() => {
                         if (audioRef.current) {
