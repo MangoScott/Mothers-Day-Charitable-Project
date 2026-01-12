@@ -12,54 +12,65 @@ const StoryBoard = () => {
     const hasAllPhotos = uploadedCount === TOTAL_SLOTS;
 
     return (
-        <div className="min-h-screen px-4 py-6">
-            <div className="max-w-lg mx-auto">
-                {/* Header - compact */}
-                <div className="bg-white rounded-2xl shadow-sm p-5 mb-4">
+        <div className="min-h-screen p-6">
+            <div className="max-w-2xl mx-auto">
+                {/* Header */}
+                <div className="card p-6 mb-6 animate-in">
                     <div className="flex items-center justify-between mb-4">
                         <div>
                             <button
                                 onClick={() => setScreen('landing')}
-                                className="text-[#8A847E] hover:text-[#2D2A26] text-sm mb-1 flex items-center gap-1"
+                                className="text-[#9A9A9A] hover:text-[#3D3D3D] text-sm font-medium flex items-center gap-1 mb-2"
                             >
-                                ← Back
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
+                                Back
                             </button>
-                            <h1 className="text-xl font-serif text-[#2D2A26]">
-                                Story Board
+                            <h1 className="font-display text-3xl text-[#3D3D3D]">
+                                Your Story Board
                             </h1>
                         </div>
 
-                        {/* Progress */}
                         <div className="text-right">
-                            <div className="text-2xl font-serif text-[#E8A87C]">
-                                {uploadedCount}<span className="text-sm text-[#8A847E] font-sans">/{TOTAL_SLOTS}</span>
+                            <div className="font-display text-4xl text-[#D4A5A5]">
+                                {uploadedCount}
+                                <span className="text-xl text-[#9A9A9A]">/{TOTAL_SLOTS}</span>
                             </div>
+                            <p className="text-sm text-[#9A9A9A]">photos added</p>
                         </div>
                     </div>
 
-                    {/* Progress bar */}
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    {/* Progress */}
+                    <div className="progress-track">
                         <div
-                            className="h-full bg-gradient-to-r from-[#F67280] to-[#E8A87C] transition-all duration-300"
+                            className="progress-fill"
                             style={{ width: `${progressPercent}%` }}
                         />
                     </div>
                 </div>
 
-                {/* Slots list - compact spacing */}
-                <div className="space-y-2 mb-4">
+                {/* Instruction */}
+                <p className="text-center text-[#9A9A9A] mb-6">
+                    Add a photo for each lyric moment in the song
+                </p>
+
+                {/* Slots */}
+                <div className="space-y-3 mb-6">
                     {lyricSlots.map((slot, index) => (
-                        <LyricSlot key={slot.id} slot={slot} index={index} />
+                        <div key={slot.id} className="animate-in" style={{ animationDelay: `${index * 30}ms` }}>
+                            <LyricSlot slot={slot} index={index} />
+                        </div>
                     ))}
                 </div>
 
-                {/* Actions - sticky */}
-                <div className="sticky bottom-4 bg-white rounded-2xl shadow-lg p-4 border border-gray-100">
-                    <div className="flex gap-3">
+                {/* Actions */}
+                <div className="card p-5 sticky bottom-4">
+                    <div className="flex gap-4">
                         <button
                             onClick={() => setScreen('preview')}
                             disabled={!hasAnyPhotos}
-                            className="flex-1 py-3 px-4 border-2 border-[#C38D94] text-[#C38D94] rounded-xl font-semibold hover:bg-[#C38D94] hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                            className="flex-1 btn-outline disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:color-[#D4A5A5]"
                         >
                             Preview
                         </button>
@@ -67,17 +78,17 @@ const StoryBoard = () => {
                         <button
                             onClick={() => setScreen('rendering')}
                             disabled={!hasAllPhotos}
-                            className="flex-1 py-3 px-4 bg-gradient-to-r from-[#F67280] to-[#E8A87C] text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                            className="flex-1 btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
                         >
-                            Generate
+                            Generate Video
                         </button>
                     </div>
 
                     {!hasAllPhotos && (
-                        <p className="text-center text-xs text-[#8A847E] mt-3">
+                        <p className="text-center text-sm text-[#9A9A9A] mt-4">
                             {hasAnyPhotos
-                                ? `${TOTAL_SLOTS - uploadedCount} more photos needed`
-                                : 'Add photos to each moment'
+                                ? `Add ${TOTAL_SLOTS - uploadedCount} more photos to generate`
+                                : 'Start by adding photos above'
                             }
                         </p>
                     )}

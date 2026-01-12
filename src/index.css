@@ -1,38 +1,39 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap');
 
-/* Base */
+:root {
+  --rose: #D4A5A5;
+  --blush: #F5E6E0;
+  --warm-white: #FDFBF9;
+  --charcoal: #3D3D3D;
+  --muted: #9A9A9A;
+  --coral: #E8B4B4;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
-  font-family: 'DM Sans', system-ui, sans-serif;
-  background: linear-gradient(135deg, #FFF8F6 0%, #FFF5EE 50%, #FFFBF7 100%);
-  min-height: 100vh;
-  color: #2D2A26;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--warm-white);
+  color: var(--charcoal);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-h1,
-h2,
-h3 {
-  font-family: 'Playfair Display', Georgia, serif;
+.font-display {
+  font-family: 'Cormorant Garamond', Georgia, serif;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -40,14 +41,143 @@ h3 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E8A87C;
-  border-radius: 3px;
+  background: var(--rose);
+  border-radius: 4px;
 }
 
-/* Utilities */
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--coral) 100%);
+  color: white;
+  font-weight: 600;
+  padding: 16px 32px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(212, 165, 165, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 165, 165, 0.5);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--rose);
+  font-weight: 600;
+  padding: 16px 32px;
+  border-radius: 12px;
+  border: 2px solid var(--rose);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background: var(--rose);
+  color: white;
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Slot */
+.slot {
+  background: white;
+  border: 1px solid #F0E8E5;
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.slot:hover {
+  border-color: var(--rose);
+  box-shadow: 0 4px 12px rgba(212, 165, 165, 0.15);
+}
+
+.slot.completed {
+  background: linear-gradient(135deg, #F9F5F3 0%, #FDF9F7 100%);
+  border-color: var(--rose);
+}
+
+/* Progress bar */
+.progress-track {
+  height: 8px;
+  background: #F0E8E5;
+  border-radius: 4px;
   overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rose) 0%, var(--coral) 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--rose) 0%, var(--coral) 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+/* Upload button */
+.upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--blush);
+  color: var(--charcoal);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upload-btn:hover {
+  background: var(--rose);
+  color: white;
+}
+
+/* Photo thumbnail */
+.thumbnail {
+  width: 72px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeIn 0.4s ease forwards;
 }
