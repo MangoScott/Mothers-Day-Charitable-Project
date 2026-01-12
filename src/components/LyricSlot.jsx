@@ -32,47 +32,68 @@ const LyricSlot = ({ slot, index }) => {
         return index;
     };
 
+    const isSpecial = slot.type === 'intro' || slot.type === 'finale';
+
     return (
-        <div className={`slot ${hasPhoto ? 'completed' : ''} flex items-center gap-4`}>
-            {/* Badge */}
-            <div className="badge flex-shrink-0">
-                {getLabel()}
-            </div>
-
-            {/* Lyric */}
-            <p className="flex-1 font-display text-lg text-[#3D3D3D]">
-                {slot.lyric}
-            </p>
-
-            {/* Photo or Upload */}
-            {hasPhoto ? (
-                <div className="relative group flex-shrink-0">
-                    <img src={photo} alt="" className="thumbnail" />
-                    <button
-                        onClick={() => removePhoto(slot.id)}
-                        className="absolute -top-2 -right-2 w-6 h-6 bg-white border border-[#F0E8E5] rounded-full text-[#9A9A9A] text-sm opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 hover:text-red-500 hover:border-red-200"
-                    >
-                        ×
-                    </button>
+        <div
+            className={`
+        rounded-xl border transition-all cursor-pointer group
+        ${hasPhoto
+                    ? 'bg-gradient-to-br from-[#fef7f7] to-white border-[#E87B7B]'
+                    : 'bg-white border-[#eee] hover:border-[#ccc]'
+                }
+      `}
+            onClick={() => !hasPhoto && fileInputRef.current?.click()}
+        >
+            <div className="flex items-center gap-4 p-4">
+                {/* Badge */}
+                <div className={`
+          w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0
+          ${isSpecial
+                        ? 'bg-[#E87B7B] text-white'
+                        : hasPhoto
+                            ? 'bg-[#1a1a1a] text-white'
+                            : 'bg-[#f5f5f5] text-[#1a1a1a]'
+                    }
+        `}>
+                    {getLabel()}
                 </div>
-            ) : (
-                <button
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={isProcessing}
-                    className="upload-btn flex-shrink-0"
-                >
-                    {isProcessing ? (
-                        <span>Adding...</span>
-                    ) : (
-                        <>
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                            </svg>
-                            Add Photo
-                        </>
-                    )}
-                </button>
-            )}
+
+                {/* Lyric */}
+                <p className={`flex-1 font-medium ${hasPhoto ? 'text-[#1a1a1a]' : 'text-[#666]'}`}>
+                    {slot.lyric}
+                </p>
+
+                {/* Photo or Upload indicator */}
+                {hasPhoto ? (
+                    <div className="relative flex-shrink-0">
+                        <img
+                            src={photo}
+                            alt=""
+                            className="w-16 h-11 object-cover rounded-lg shadow-sm"
+                        />
+                        <button
+                            onClick={(e) => { e.stopPropagation(); removePhoto(slot.id); }}
+                            className="absolute -top-2 -right-2 w-6 h-6 bg-[#1a1a1a] text-white rounded-full text-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                        >
+                            ×
+                        </button>
+                    </div>
+                ) : (
+                    <div className="flex-shrink-0 flex items-center gap-2 text-sm text-[#999] group-hover:text-[#666] transition-colors">
+                        {isProcessing ? (
+                            <span className="animate-pulse">Adding...</span>
+                        ) : (
+                            <>
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                                </svg>
+                                <span className="hidden sm:inline">Add photo</span>
+                            </>
+                        )}
+                    </div>
+                )}
+            </div>
 
             <input
                 ref={fileInputRef}
