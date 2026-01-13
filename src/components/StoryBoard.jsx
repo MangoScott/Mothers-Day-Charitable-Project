@@ -1,4 +1,5 @@
-import { ArrowLeft, Eye } from 'lucide-react';
+import { ArrowLeft, Eye, Upload, ImagePlus } from 'lucide-react';
+import { useRef } from 'react';
 import useVideoStore from '../store/useVideoStore';
 import LyricSlot from './LyricSlot';
 import { lyricSlots } from '../utils/lyricsData';
@@ -7,10 +8,13 @@ export default function StoryBoard() {
     const photos = useVideoStore((state) => state.photos);
     const getUploadedCount = useVideoStore((state) => state.getUploadedCount);
     const hasAllPhotosFunc = useVideoStore((state) => state.hasAllPhotos);
+    const setBulkPhotos = useVideoStore((state) => state.setBulkPhotos);
 
     const progress = getUploadedCount();
     const hasAllPhotos = hasAllPhotosFunc();
     const slots = lyricSlots;
+
+    const bulkInputRef = useRef(null);
 
     const handleGoBack = () => {
         useVideoStore.setState({ currentScreen: 'landing' });
@@ -24,6 +28,33 @@ export default function StoryBoard() {
         if (hasAllPhotos) {
             useVideoStore.setState({ currentScreen: 'rendering' });
         }
+    };
+
+    const handleBulkUpload = (event) => {
+        const files = Array.from(event.target.files);
+        if (files.length === 0) return;
+
+        // Sort files by name to maintain order
+        files.sort((a, b) => a.name.localeCompare(b.name));
+
+        const photoPromises = files.map((file) => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => resolve(null);
+                reader.readAsDataURL(file);
+            });
+        });
+
+        Promise.all(photoPromises).then((photoDataArray) => {
+            const validPhotos = photoDataArray.filter(Boolean);
+            if (validPhotos.length > 0) {
+                setBulkPhotos(validPhotos);
+            }
+        });
+
+        // Reset input so same files can be selected again
+        event.target.value = '';
     };
 
     const styles = {
@@ -120,6 +151,33 @@ export default function StoryBoard() {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
             gap: '24px',
+        },
+        bulkUploadSection: {
+            marginBottom: '32px',
+            display: 'flex',
+            gap: '16px',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+        },
+        bulkUploadButton: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            padding: '14px 24px',
+            background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+            border: 'none',
+            borderRadius: '14px',
+            color: 'white',
+            fontWeight: '600',
+            fontSize: '0.95rem',
+            cursor: 'pointer',
+            boxShadow: '0 8px 24px rgba(59, 130, 246, 0.3)',
+            transition: 'all 0.2s ease',
+        },
+        bulkUploadHint: {
+            fontSize: '0.875rem',
+            color: '#6b7280',
+            fontStyle: 'italic',
         },
         actionBar: {
             position: 'fixed',
@@ -220,6 +278,36 @@ export default function StoryBoard() {
 
             {/* Photo Grid */}
             <main style={styles.main}>
+                {/* Bulk Upload Section */}
+                <div style={styles.bulkUploadSection}>
+                    <input
+                        ref={bulkInputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleBulkUpload}
+                        style={{ display: 'none' }}
+                    />
+                    <button
+                        onClick={() => bulkInputRef.current?.click()}
+                        style={styles.bulkUploadButton}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 12px 32px rgba(59, 130, 246, 0.4)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 8px 24px rgba(59, 130, 246, 0.3)';
+                        }}
+                    >
+                        <Upload style={{ width: 20, height: 20 }} />
+                        Upload All Photos at Once
+                    </button>
+                    <p style={styles.bulkUploadHint}>
+                        Select up to 14 photos in order, or add them individually below
+                    </p>
+                </div>
+
                 <div style={styles.grid}>
                     {slots.map((slot, index) => (
                         <LyricSlot key={slot.id} slot={slot} index={index} />

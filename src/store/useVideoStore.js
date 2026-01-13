@@ -39,6 +39,20 @@ const useVideoStore = create((set, get) => ({
         photos: { ...state.photos, [slotId]: null }
     })),
 
+    // Bulk upload: assign photos to slots in order
+    setBulkPhotos: (photoDataArray) => set((state) => {
+        const newPhotos = { ...state.photos };
+        const slotIds = lyricSlots.map(slot => slot.id);
+
+        photoDataArray.forEach((photoData, index) => {
+            if (index < slotIds.length) {
+                newPhotos[slotIds[index]] = photoData;
+            }
+        });
+
+        return { photos: newPhotos };
+    }),
+
     clearAllPhotos: () => set({ photos: initialPhotos }),
 
     setIsGenerating: (isGenerating) => set({ isGenerating }),
