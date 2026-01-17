@@ -347,7 +347,7 @@ export default function LandingScreen() {
                                 </div>
                                 <h3 style={styles.cardTitle}>Upload Photos</h3>
                                 <p style={styles.cardText}>
-                                    Add 14 of your favorite moments to match each lyric of the song
+                                    Add 21 of your favorite moments to match each lyric of the song
                                 </p>
                             </div>
 

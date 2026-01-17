@@ -41,7 +41,7 @@ function App() {
           <div className="w-2 h-2 rounded-full bg-gradient-to-r from-rose-400 to-pink-400 animate-gentle-pulse" />
         </div>
         <p className="text-xs text-gray-500 font-medium">
-          The Wendy's Song Project — A Charitable Initiative • <a href="https://sglasgow.com" target="_blank" rel="noopener noreferrer" className="hover:text-rose-500 transition-colors">Designed by Scott Glasgow</a>
+          The Wendy's Song Project — A Charitable Initiative • © 1986/2026 Kim Coleman Uhlik and Wendy Emerick • <a href="https://sglasgow.com" target="_blank" rel="noopener noreferrer" className="hover:text-rose-500 transition-colors">Designed by Scott Glasgow</a>
         </p>
       </footer>
     </div>
