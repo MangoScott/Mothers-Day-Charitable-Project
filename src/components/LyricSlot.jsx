@@ -1,4 +1,4 @@
-import { Image, X, Edit3 } from 'lucide-react';
+import { Image, X, Edit3, Sparkles } from 'lucide-react';
 import useVideoStore from '../store/useVideoStore';
 
 export default function LyricSlot({ slot, index }) {
@@ -188,7 +188,26 @@ export default function LyricSlot({ slot, index }) {
 
             {/* Photo Upload Area */}
             <div style={styles.photoArea}>
-                {imageUrl ? (
+                {(slot.type === 'intro' || slot.isGenerated) ? (
+                    <div style={{
+                        ...styles.uploadLabel,
+                        background: '#fdf2f8',
+                        cursor: 'default'
+                    }}>
+                        <div style={{
+                            ...styles.uploadIcon,
+                            background: '#fce7f3'
+                        }}>
+                            <Sparkles style={{ width: 28, height: 28, color: '#ec4899' }} />
+                        </div>
+                        <p style={{ ...styles.uploadText, color: '#be185d' }}>
+                            {slot.type === 'intro' ? 'Title Card' : 'Closing Card'}
+                        </p>
+                        <p style={styles.uploadHint}>
+                            Auto-generated text slide
+                        </p>
+                    </div>
+                ) : imageUrl ? (
                     <>
                         <img
                             src={imageUrl}
