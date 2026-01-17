@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Square, Save, RotateCcw, Check } from 'lucide-react';
-import { Play, Square, Save, RotateCcw, Check } from 'lucide-react';
-
 const audioFile = import.meta.env.BASE_URL + 'audio/wendys_song.mp3';
 
 // The lyrics to sync (without timings)
