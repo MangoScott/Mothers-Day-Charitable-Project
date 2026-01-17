@@ -93,10 +93,8 @@ export default function LandingScreen() {
         },
         titleGradient: {
             display: 'block',
-            background: 'linear-gradient(135deg, #ec4899 0%, #f43f5e 50%, #db2777 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
+            color: '#dc2626',
+            marginTop: '8px',
         },
         subtitle: {
             fontSize: 'clamp(1.125rem, 2.5vw, 1.5rem)',
@@ -273,15 +271,15 @@ export default function LandingScreen() {
                     <div style={styles.heroInner}>
                         {/* Badge */}
                         <div style={styles.badge}>
-                            <Heart style={{ width: 16, height: 16, color: '#ec4899', fill: '#ec4899' }} />
-                            <span style={styles.badgeText}>A Charitable Mother's Day Project</span>
+                            <Heart style={{ width: 16, height: 16, color: '#dc2626', fill: '#dc2626' }} />
+                            <span style={styles.badgeText}>A Mother's Day Charitable Project</span>
                             <Sparkles style={{ width: 16, height: 16, color: '#f59e0b' }} />
                         </div>
 
                         {/* Title */}
                         <h1 style={styles.title}>
-                            <span style={styles.titleMain}>The Wendy's Song</span>
-                            <span style={styles.titleGradient}>Project</span>
+                            <span style={{ ...styles.titleMain, color: '#dc2626' }}>A Mother’s Day Story Card</span>
+                            <span style={{ fontSize: '0.5em', display: 'block', marginTop: '16px', fontWeight: '400', color: '#374151' }}>made especially for YOU</span>
                         </h1>
 
                         {/* Subtitle */}

@@ -202,6 +202,38 @@ const VideoPreview = () => {
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, width, height);
 
+        // 1. Title Slide
+        if (slot.id === 1) {
+            ctx.textAlign = 'center';
+            // Main Title
+            ctx.fillStyle = '#dc2626';
+            ctx.font = 'bold 80px Inter, sans-serif';
+            ctx.fillText('A Mother’s Day Story Card', width / 2, height / 2 - 40);
+
+            // Subtitle
+            ctx.fillStyle = '#374151';
+            ctx.font = '32px Inter, sans-serif';
+            ctx.fillText('made especially for YOU', width / 2, height / 2 + 20);
+
+            // Copyright & Design
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '16px Inter, sans-serif';
+            ctx.fillText('© 1986/2026 Kim Coleman Uhlik and Wendy Emerick', 40, height - 40);
+            ctx.fillText('Design by Scott Glasgow', 40, height - 20);
+            return; // Initial slide usually doesn't have an overlay block
+        }
+
+        // 2. Finale Slide
+        if (slot.isGenerated) {
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#dc2626';
+            ctx.font = 'bold 60px Inter, sans-serif';
+            ctx.fillText('Happy Mother’s Day, Mom', width / 2, height / 2);
+            return;
+        }
+
+        // 3. Standard Photo Slots
         const img = loadedImages[slot.id];
         if (img) {
             const slotProgress = getSlotProgress(time, slot);
@@ -241,41 +273,16 @@ const VideoPreview = () => {
             ctx.fillText('No photo for this scene', width / 2, height / 2);
         }
 
-        // Draw lyric overlay - use customTitle for editable slots
-        const lyric = slot.editable ? customTitle : slot.lyric;
+        // Lyric Overlay
+        if (slot.lyric) {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.fillRect(0, height - 100, width, 100);
 
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.fillRect(0, height - 100, width, 100);
-
-        ctx.fillStyle = '#FFFFFF';
-        ctx.font = 'italic 28px Georgia, serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-
-        const maxWidth = width - 80;
-        const words = lyric.split(' ');
-        let line = '';
-        const lineHeight = 36;
-        const lines = [];
-
-        for (const word of words) {
-            const testLine = line + word + ' ';
-            const metrics = ctx.measureText(testLine);
-            if (metrics.width > maxWidth && line !== '') {
-                lines.push(line.trim());
-                line = word + ' ';
-            } else {
-                line = testLine;
-            }
-        }
-        lines.push(line.trim());
-
-        const totalHeight = lines.length * lineHeight;
-        let y = height - 50 - totalHeight / 2;
-
-        for (const text of lines) {
-            ctx.fillText(`"${text}"`, width / 2, y);
-            y += lineHeight;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'italic 32px Georgia, serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(slot.lyric, width / 2, height - 50);
         }
     }, [loadedImages, customTitle]);
 

@@ -15,7 +15,7 @@ const useVideoStore = create((set, get) => ({
     photos: initialPhotos,
 
     // Custom title for the title card (slot 1)
-    customTitle: 'A Tribute to Mom ❤️',
+    customTitle: 'A Mother’s Day Story Card',
 
     // Rendering state
     isGenerating: false,

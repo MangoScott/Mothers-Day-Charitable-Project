@@ -134,15 +134,119 @@ const VideoRenderer = () => {
             setStatus('rendering');
             handleProgress(0, 'Initializing video encoder...');
 
-            const images = lyricSlots.map((slot) => ({
-                dataUrl: photos[slot.id],
-                // Use customTitle for editable slots (title card)
-                lyric: slot.editable ? customTitle : slot.lyric,
-                duration: slot.displayDuration,
-            }));
+            const canvas = document.createElement('canvas');
+            canvas.width = 1280;
+            canvas.height = 720;
+            const ctx = canvas.getContext('2d');
+
+            const processedImages = [];
+
+            // Helper to load image
+            const loadImage = (src) => new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = src;
+            });
+
+            for (let i = 0; i < lyricSlots.length; i++) {
+                const slot = lyricSlots[i];
+                handleProgress(5 + Math.round((i / lyricSlots.length) * 20), `Preparing slide ${i + 1}/${lyricSlots.length}...`);
+
+                // Clear canvas
+                const gradient = ctx.createLinearGradient(0, 0, 0, 720);
+                gradient.addColorStop(0, '#fdf2f8');
+                gradient.addColorStop(1, '#fce7f3');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 1280, 720);
+
+                // --- Drawing Logic ---
+
+                // 1. Title Slide (Slot 1)
+                if (slot.id === 1) {
+                    // Draw custom title card
+                    ctx.textAlign = 'center';
+
+                    // Main Title
+                    ctx.fillStyle = '#dc2626'; // Red
+                    ctx.font = 'bold 80px Inter, sans-serif';
+                    ctx.fillText('A Mother’s Day Story Card', 640, 320);
+
+                    // Subtitle
+                    ctx.fillStyle = '#374151'; // Gray
+                    ctx.font = '32px Inter, sans-serif';
+                    ctx.fillText('made especially for YOU', 640, 380);
+
+                    // Copyright & Design
+                    ctx.textAlign = 'left';
+                    ctx.fillStyle = '#6b7280';
+                    ctx.font = '16px Inter, sans-serif';
+                    ctx.fillText('© 1986/2026 Kim Coleman Uhlik and Wendy Emerick', 40, 680);
+                    ctx.fillText('Design by Scott Glasgow', 40, 700);
+
+                    // 2. Finale Slide (e.g. Slot 22)
+                } else if (slot.isGenerated) { // Finale
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = '#dc2626';
+                    ctx.font = 'bold 60px Inter, sans-serif';
+                    ctx.fillText('Happy Mother’s Day, Mom', 640, 360);
+
+                    // 3. Standard Photo Slots
+                } else {
+                    const photoUrl = photos[slot.id];
+                    if (photoUrl) {
+                        try {
+                            const img = await loadImage(photoUrl);
+
+                            // Draw image covering canvas (aspect fill)
+                            const imgAspect = img.width / img.height;
+                            const canvasAspect = 1280 / 720;
+                            let drawWidth, drawHeight, drawX, drawY;
+
+                            if (imgAspect > canvasAspect) {
+                                drawHeight = 720;
+                                drawWidth = 720 * imgAspect;
+                                drawX = (1280 - drawWidth) / 2;
+                                drawY = 0;
+                            } else {
+                                drawWidth = 1280;
+                                drawHeight = 1280 / imgAspect;
+                                drawX = 0;
+                                drawY = (720 - drawHeight) / 2;
+                            }
+                            ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+                        } catch (e) {
+                            console.warn(`Failed to load image for slot ${slot.id}`, e);
+                        }
+                    } else {
+                        // Placeholder if missing
+                        ctx.fillStyle = '#d1d5db';
+                        ctx.textAlign = 'center';
+                        ctx.font = 'bold 24px Inter, sans-serif';
+                        ctx.fillText('No photo', 640, 360);
+                    }
+
+                    // Lyric Overlay
+                    if (slot.lyric) {
+                        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                        ctx.fillRect(0, 620, 1280, 100);
+
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.font = 'italic 32px Georgia, serif';
+                        ctx.fillText(slot.lyric, 640, 670);
+                    }
+                }
+
+                processedImages.push({
+                    dataUrl: canvas.toDataURL('image/jpeg', 0.9),
+                    duration: slot.displayDuration
+                });
+            }
 
             const audioPath = import.meta.env.BASE_URL + 'audio/wendys_song.mp3';
-            const videoBlob = await generateVideo(images, audioPath, handleProgress);
+            const videoBlob = await generateVideo(processedImages, audioPath, handleProgress);
 
             downloadBlob(videoBlob, 'MothersDayTribute.mp4');
 

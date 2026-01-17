@@ -260,7 +260,7 @@ export default function StoryBoard() {
                         </div>
                         <div style={styles.progressBlock}>
                             <p style={styles.progressLabel}>Progress</p>
-                            <p style={styles.progressCount}>{progress}/14</p>
+                            <p style={styles.progressCount}>{progress}/21</p>
                         </div>
                     </div>
 
@@ -269,7 +269,7 @@ export default function StoryBoard() {
                         <div
                             style={{
                                 ...styles.progressFill,
-                                width: `${(progress / 14) * 100}%`
+                                width: `${(progress / 21) * 100}%`
                             }}
                         />
                     </div>
@@ -304,7 +304,7 @@ export default function StoryBoard() {
                         Upload All Photos at Once
                     </button>
                     <p style={styles.bulkUploadHint}>
-                        Select up to 14 photos in order, or add them individually below
+                        Select 21 photos in order, or add them individually below
                     </p>
                 </div>
 
