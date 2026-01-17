@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Square, Save, RotateCcw, Check } from 'lucide-react';
-import audioFile from '/audio/wendys_song.mp3';
+import { Play, Square, Save, RotateCcw, Check } from 'lucide-react';
+
+const audioFile = import.meta.env.BASE_URL + 'audio/wendys_song.mp3';
 
 // The lyrics to sync (without timings)
 const LYRICS_TO_SYNC = [
@@ -156,8 +158,8 @@ export default function SyncTool({ onBack }) {
                             <button
                                 onClick={isPlaying ? recordTimestamp : startRecording}
                                 className={`w-32 h-32 rounded-full flex flex-col items-center justify-center transition-all duration-200 shadow-2xl ${isPlaying
-                                        ? 'bg-rose-500 hover:bg-rose-600 active:scale-95 ring-8 ring-rose-100'
-                                        : 'bg-emerald-500 hover:bg-emerald-600 hover:scale-105 ring-8 ring-emerald-100'
+                                    ? 'bg-rose-500 hover:bg-rose-600 active:scale-95 ring-8 ring-rose-100'
+                                    : 'bg-emerald-500 hover:bg-emerald-600 hover:scale-105 ring-8 ring-emerald-100'
                                     }`}
                             >
                                 {isPlaying ? (
