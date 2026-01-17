@@ -324,6 +324,10 @@ export default function LandingScreen() {
                                 <span style={styles.statDot}></span>
                                 <span>Processed Locally</span>
                             </div>
+                            <div style={{ ...styles.statItem, cursor: 'pointer' }} onClick={() => useVideoStore.setState({ currentScreen: 'sync' })}>
+                                <span style={{ ...styles.statDot, background: '#f43f5e' }}></span>
+                                <span style={{ textDecoration: 'underline' }}>Sync Lyrics</span>
+                            </div>
                         </div>
                     </div>
                 </section>

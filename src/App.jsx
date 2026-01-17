@@ -4,6 +4,7 @@ import LandingScreen from './components/LandingScreen';
 import StoryBoard from './components/StoryBoard';
 import VideoPreview from './components/VideoPreview';
 import VideoRenderer from './components/VideoRenderer';
+import SyncTool from './components/SyncTool';
 import './index.css';
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
         return <VideoPreview />;
       case 'rendering':
         return <VideoRenderer />;
+      case 'sync':
+        return <SyncTool onBack={() => useVideoStore.setState({ currentScreen: 'landing' })} />;
       default:
         return <LandingScreen />;
     }
