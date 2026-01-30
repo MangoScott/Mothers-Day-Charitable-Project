@@ -162,34 +162,175 @@ const VideoRenderer = () => {
 
                 // --- Drawing Logic ---
 
-                // 1. Title Slide (Slot 1)
+                // 1. Title Slide - Premium Design
                 if (slot.id === 1) {
-                    // Draw custom title card
+                    // Decorative gradient background overlay
+                    const bgGradient = ctx.createRadialGradient(640, 360, 0, 640, 360, 900);
+                    bgGradient.addColorStop(0, 'rgba(252, 231, 243, 0.6)');
+                    bgGradient.addColorStop(0.5, 'rgba(253, 242, 248, 0.4)');
+                    bgGradient.addColorStop(1, 'rgba(255, 241, 242, 0.3)');
+                    ctx.fillStyle = bgGradient;
+                    ctx.fillRect(0, 0, 1280, 720);
+
+                    // Decorative hearts - scattered around
+                    ctx.save();
+                    const heartPositions = [
+                        { x: 120, y: 150, size: 40, opacity: 0.15, rotation: -15 },
+                        { x: 1130, y: 180, size: 35, opacity: 0.12, rotation: 20 },
+                        { x: 200, y: 520, size: 30, opacity: 0.1, rotation: -25 },
+                        { x: 1080, y: 540, size: 45, opacity: 0.15, rotation: 15 },
+                        { x: 290, y: 260, size: 25, opacity: 0.08, rotation: 10 },
+                        { x: 1020, y: 410, size: 28, opacity: 0.1, rotation: -10 },
+                    ];
+                    
+                    heartPositions.forEach(heart => {
+                        ctx.save();
+                        ctx.translate(heart.x, heart.y);
+                        ctx.rotate(heart.rotation * Math.PI / 180);
+                        ctx.globalAlpha = heart.opacity;
+                        ctx.fillStyle = '#ec4899';
+                        ctx.beginPath();
+                        const s = heart.size;
+                        ctx.moveTo(0, -s * 0.3);
+                        ctx.bezierCurveTo(s * 0.5, -s * 0.8, s, -s * 0.3, 0, s * 0.5);
+                        ctx.bezierCurveTo(-s, -s * 0.3, -s * 0.5, -s * 0.8, 0, -s * 0.3);
+                        ctx.fill();
+                        ctx.restore();
+                    });
+                    ctx.restore();
+
+                    // Decorative top accent line
+                    const accentGradient = ctx.createLinearGradient(490, 0, 790, 0);
+                    accentGradient.addColorStop(0, 'transparent');
+                    accentGradient.addColorStop(0.2, '#ec4899');
+                    accentGradient.addColorStop(0.5, '#f472b6');
+                    accentGradient.addColorStop(0.8, '#ec4899');
+                    accentGradient.addColorStop(1, 'transparent');
+                    ctx.fillStyle = accentGradient;
+                    ctx.fillRect(490, 80, 300, 4);
+
                     ctx.textAlign = 'center';
+                    
+                    // Small badge text
+                    ctx.fillStyle = '#9ca3af';
+                    ctx.font = '500 20px Inter, sans-serif';
+                    ctx.fillText('✦  A Charitable Project  ✦', 640, 230);
 
                     // Main Title
-                    ctx.fillStyle = '#dc2626'; // Red
-                    ctx.font = 'bold 80px Inter, sans-serif';
-                    ctx.fillText('A Mother’s Day Story Card', 640, 320);
+                    ctx.fillStyle = '#be185d';
+                    ctx.font = 'bold 72px Inter, sans-serif';
+                    ctx.fillText("A Mother's Day", 640, 310);
+                    
+                    // "Story Card" with gradient emphasis
+                    const titleGradient = ctx.createLinearGradient(440, 0, 840, 0);
+                    titleGradient.addColorStop(0, '#ec4899');
+                    titleGradient.addColorStop(0.5, '#f43f5e');
+                    titleGradient.addColorStop(1, '#ec4899');
+                    ctx.fillStyle = titleGradient;
+                    ctx.font = 'bold 88px Inter, sans-serif';
+                    ctx.fillText('Story Card', 640, 410);
 
-                    // Subtitle
-                    ctx.fillStyle = '#374151'; // Gray
-                    ctx.font = '32px Inter, sans-serif';
-                    ctx.fillText('made especially for YOU', 640, 380);
-
-                    // Copyright & Design
-                    ctx.textAlign = 'left';
+                    // Subtitle with emphasis on "YOU"
                     ctx.fillStyle = '#6b7280';
-                    ctx.font = '16px Inter, sans-serif';
-                    ctx.fillText('© 1986/2026 Kim Coleman Uhlik and Wendy Emerick', 40, 680);
-                    ctx.fillText('Design by Scott Glasgow', 40, 700);
+                    ctx.font = '400 28px Inter, sans-serif';
+                    ctx.fillText('made especially for', 600, 480);
+                    ctx.fillStyle = '#ec4899';
+                    ctx.font = 'italic 600 32px Inter, sans-serif';
+                    ctx.fillText('YOU', 755, 480);
 
-                    // 2. Finale Slide (e.g. Slot 22)
-                } else if (slot.isGenerated) { // Finale
+                    // Bottom decorative line
+                    ctx.fillStyle = accentGradient;
+                    ctx.fillRect(540, 620, 200, 3);
+
+                    // Copyright & Design - styled footer
                     ctx.textAlign = 'center';
-                    ctx.fillStyle = '#dc2626';
-                    ctx.font = 'bold 60px Inter, sans-serif';
-                    ctx.fillText('Happy Mother’s Day, Mom', 640, 360);
+                    ctx.fillStyle = '#9ca3af';
+                    ctx.font = '14px Inter, sans-serif';
+                    ctx.fillText("The Wendy's Song Project  •  © 1986/2026 Kim Coleman Uhlik and Wendy Emerick", 640, 665);
+                    ctx.font = '13px Inter, sans-serif';
+                    ctx.fillStyle = '#b4b4b4';
+                    ctx.fillText('Designed by Scott Glasgow', 640, 688);
+
+                // 2. Finale Slide - Premium Design
+                } else if (slot.isGenerated) {
+                    // Warm gradient background
+                    const finaleGradient = ctx.createRadialGradient(640, 360, 0, 640, 360, 750);
+                    finaleGradient.addColorStop(0, 'rgba(254, 205, 211, 0.5)');
+                    finaleGradient.addColorStop(0.5, 'rgba(252, 231, 243, 0.4)');
+                    finaleGradient.addColorStop(1, 'rgba(253, 242, 248, 0.2)');
+                    ctx.fillStyle = finaleGradient;
+                    ctx.fillRect(0, 0, 1280, 720);
+
+                    // Large decorative heart in center background
+                    ctx.save();
+                    ctx.translate(640, 330);
+                    ctx.globalAlpha = 0.08;
+                    ctx.fillStyle = '#ec4899';
+                    ctx.beginPath();
+                    const heartSize = 250;
+                    ctx.moveTo(0, -heartSize * 0.3);
+                    ctx.bezierCurveTo(heartSize * 0.5, -heartSize * 0.8, heartSize, -heartSize * 0.3, 0, heartSize * 0.5);
+                    ctx.bezierCurveTo(-heartSize, -heartSize * 0.3, -heartSize * 0.5, -heartSize * 0.8, 0, -heartSize * 0.3);
+                    ctx.fill();
+                    ctx.restore();
+
+                    // Scattered small hearts
+                    const finaleHearts = [
+                        { x: 180, y: 200, size: 25, opacity: 0.2 },
+                        { x: 1080, y: 220, size: 30, opacity: 0.18 },
+                        { x: 250, y: 540, size: 22, opacity: 0.15 },
+                        { x: 1030, y: 520, size: 28, opacity: 0.2 },
+                        { x: 120, y: 360, size: 18, opacity: 0.12 },
+                        { x: 1150, y: 410, size: 20, opacity: 0.15 },
+                    ];
+                    
+                    finaleHearts.forEach(heart => {
+                        ctx.save();
+                        ctx.translate(heart.x, heart.y);
+                        ctx.globalAlpha = heart.opacity;
+                        ctx.fillStyle = '#f472b6';
+                        ctx.beginPath();
+                        const s = heart.size;
+                        ctx.moveTo(0, -s * 0.3);
+                        ctx.bezierCurveTo(s * 0.5, -s * 0.8, s, -s * 0.3, 0, s * 0.5);
+                        ctx.bezierCurveTo(-s, -s * 0.3, -s * 0.5, -s * 0.8, 0, -s * 0.3);
+                        ctx.fill();
+                        ctx.restore();
+                    });
+
+                    ctx.textAlign = 'center';
+                    
+                    // "Happy" with elegant styling
+                    ctx.fillStyle = '#be185d';
+                    ctx.font = '500 48px Inter, sans-serif';
+                    ctx.fillText('Happy', 640, 280);
+                    
+                    // "Mother's Day" - main emphasis
+                    const finaleTextGradient = ctx.createLinearGradient(390, 0, 890, 0);
+                    finaleTextGradient.addColorStop(0, '#ec4899');
+                    finaleTextGradient.addColorStop(0.5, '#f43f5e');
+                    finaleTextGradient.addColorStop(1, '#ec4899');
+                    ctx.fillStyle = finaleTextGradient;
+                    ctx.font = 'bold 80px Inter, sans-serif';
+                    ctx.fillText("Mother's Day", 640, 370);
+                    
+                    // "Mom" with heart
+                    ctx.fillStyle = '#6b7280';
+                    ctx.font = '400 36px Inter, sans-serif';
+                    ctx.fillText('to the best Mom ever', 640, 440);
+                    
+                    // Heart emoji row
+                    ctx.font = '32px Inter, sans-serif';
+                    ctx.fillText('❤️  💕  ❤️', 640, 500);
+
+                    // Bottom accent
+                    const bottomAccent = ctx.createLinearGradient(560, 0, 720, 0);
+                    bottomAccent.addColorStop(0, 'transparent');
+                    bottomAccent.addColorStop(0.3, '#f472b6');
+                    bottomAccent.addColorStop(0.7, '#f472b6');
+                    bottomAccent.addColorStop(1, 'transparent');
+                    ctx.fillStyle = bottomAccent;
+                    ctx.fillRect(560, 660, 160, 3);
 
                     // 3. Standard Photo Slots
                 } else {
