@@ -273,7 +273,7 @@ const VideoPreview = () => {
             // Subtitle with emphasis on "YOU"
             ctx.fillStyle = '#6b7280';
             ctx.font = '400 28px Inter, sans-serif';
-            ctx.fillText('made especially for ', width / 2 - 40, height / 2 + 120);
+            ctx.fillText('made especially for', width / 2 - 40, height / 2 + 120);
             ctx.fillStyle = '#ec4899';
             ctx.font = 'italic 600 32px Inter, sans-serif';
             ctx.fillText('YOU', width / 2 + 115, height / 2 + 120);
@@ -295,7 +295,6 @@ const VideoPreview = () => {
 
         // 2. Narrative Slides (spoken intro before singing)
         if (slot.type === 'narrative') {
-            // Soft gradient background
             const bgGradient = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, width * 0.7);
             bgGradient.addColorStop(0, 'rgba(252, 231, 243, 0.6)');
             bgGradient.addColorStop(0.5, 'rgba(253, 242, 248, 0.4)');
@@ -303,7 +302,6 @@ const VideoPreview = () => {
             ctx.fillStyle = bgGradient;
             ctx.fillRect(0, 0, width, height);
 
-            // Decorative hearts - subtle background
             ctx.save();
             const heartPositions = [
                 { x: 150, y: 180, size: 30, opacity: 0.1, rotation: -10 },
@@ -328,20 +326,15 @@ const VideoPreview = () => {
             });
             ctx.restore();
 
-            // Center the narrative text
             ctx.textAlign = 'center';
-
-            // Decorative quotation mark
             ctx.fillStyle = 'rgba(236, 72, 153, 0.15)';
             ctx.font = 'bold 200px Georgia, serif';
             ctx.fillText('"', width / 2 - 300, height / 2 - 20);
 
-            // Main narrative text - italic, elegant
             ctx.fillStyle = '#374151';
             ctx.font = 'italic 48px Georgia, serif';
             ctx.fillText(slot.lyric, width / 2, height / 2);
 
-            // Small label at bottom
             ctx.fillStyle = '#9ca3af';
             ctx.font = '18px Inter, sans-serif';
             ctx.fillText('— spoken intro —', width / 2, height - 80);

@@ -1,12 +1,11 @@
 // Lyrics data structure with timing for "Wendy's Song"
 // Total song duration: 124 seconds (2:04)
-// Timing from email feedback - transition points measured from the song
+// Timing from email - exact transition points
 
-// Slide structure based on email:
-// Slide 1: Credits (0-8s) - single violin note
-// Slides 2-5: Narrative intro (spoken, before singing)
-// Slides 6-23: Sung lyrics
-// Slide 24: Outro/end
+// Email timing (slide starts at these seconds):
+// 1: 0s, 2: 8s, 3: 11s, 4: 17s, 5: 22s, 6: 30s, 7: 35s, 8: 40s, 9: 45s,
+// 10: 50s, 11: 56s, 12: 60s, 13: 66s, 14: 72s, 15: 78s, 16: 82s, 17: 87s,
+// 18: 92s, 19: 97s, 20: 103s, 21: 108s, 22: 113s, 23: 117s, 24: 124s
 
 export const lyricSlots = [
     {
@@ -17,7 +16,7 @@ export const lyricSlots = [
         editable: true,
         startTime: 0,
         endTime: 8,
-        displayDuration: 8, // Credits slide with single violin note
+        displayDuration: 8,
     },
     {
         id: 2,
@@ -25,7 +24,7 @@ export const lyricSlots = [
         lyric: "Hi, mom, it's me",
         startTime: 8,
         endTime: 11,
-        displayDuration: 3, // slide 2 - narrative intro
+        displayDuration: 3,
     },
     {
         id: 3,
@@ -33,7 +32,7 @@ export const lyricSlots = [
         lyric: "I couldn't find the words to say",
         startTime: 11,
         endTime: 17,
-        displayDuration: 6, // slide 3 - narrative
+        displayDuration: 6,
     },
     {
         id: 4,
@@ -41,7 +40,7 @@ export const lyricSlots = [
         lyric: 'just how much you mean to me',
         startTime: 17,
         endTime: 22,
-        displayDuration: 5, // slide 4 - narrative
+        displayDuration: 5,
     },
     {
         id: 5,
@@ -49,7 +48,7 @@ export const lyricSlots = [
         lyric: 'so I wrote down how I feel in this song',
         startTime: 22,
         endTime: 30,
-        displayDuration: 8, // slide 5 - narrative ends
+        displayDuration: 8,
     },
     {
         id: 6,
@@ -57,7 +56,7 @@ export const lyricSlots = [
         lyric: 'For my hurt feelings, she offered sympathy',
         startTime: 30,
         endTime: 35,
-        displayDuration: 5, // slide 6 - singing begins
+        displayDuration: 5,
     },
     {
         id: 7,
@@ -65,7 +64,7 @@ export const lyricSlots = [
         lyric: 'Through both the good times and the bad',
         startTime: 35,
         endTime: 40,
-        displayDuration: 5, // slide 7
+        displayDuration: 5,
     },
     {
         id: 8,
@@ -73,7 +72,7 @@ export const lyricSlots = [
         lyric: 'She was the one true friend I always had',
         startTime: 40,
         endTime: 45,
-        displayDuration: 5, // slide 8
+        displayDuration: 5,
     },
     {
         id: 9,
@@ -81,7 +80,7 @@ export const lyricSlots = [
         lyric: 'When I was sick, she stayed up through the night',
         startTime: 45,
         endTime: 50,
-        displayDuration: 5, // slide 9
+        displayDuration: 5,
     },
     {
         id: 10,
@@ -89,7 +88,7 @@ export const lyricSlots = [
         lyric: 'She kissed my sores and my tears away',
         startTime: 50,
         endTime: 56,
-        displayDuration: 6, // slide 10
+        displayDuration: 6,
     },
     {
         id: 11,
@@ -97,7 +96,7 @@ export const lyricSlots = [
         lyric: 'Made time for me during her busy day',
         startTime: 56,
         endTime: 60,
-        displayDuration: 4, // slide 11
+        displayDuration: 4,
     },
     {
         id: 12,
@@ -105,7 +104,7 @@ export const lyricSlots = [
         lyric: 'She sheltered me from all harm',
         startTime: 60,
         endTime: 66,
-        displayDuration: 6, // slide 12 (1:00 + 6s)
+        displayDuration: 6,
     },
     {
         id: 13,
@@ -113,7 +112,7 @@ export const lyricSlots = [
         lyric: 'Through the years',
         startTime: 66,
         endTime: 72,
-        displayDuration: 6, // slide 13 (1:06 + 6s)
+        displayDuration: 6,
     },
     {
         id: 14,
@@ -121,7 +120,7 @@ export const lyricSlots = [
         lyric: 'She kept me safe and warm',
         startTime: 72,
         endTime: 78,
-        displayDuration: 6, // slide 14 (1:12 + 6s)
+        displayDuration: 6,
     },
     {
         id: 15,
@@ -129,7 +128,7 @@ export const lyricSlots = [
         lyric: 'When I was growing up',
         startTime: 78,
         endTime: 82,
-        displayDuration: 4, // slide 15 (1:18 + 4s)
+        displayDuration: 4,
     },
     {
         id: 16,
@@ -137,7 +136,7 @@ export const lyricSlots = [
         lyric: 'She was always there',
         startTime: 82,
         endTime: 87,
-        displayDuration: 5, // slide 16 (1:22 + 5s)
+        displayDuration: 5,
     },
     {
         id: 17,
@@ -145,7 +144,7 @@ export const lyricSlots = [
         lyric: 'When I was bad, she was firm but fair',
         startTime: 87,
         endTime: 92,
-        displayDuration: 5, // slide 17 (1:27 + 5s)
+        displayDuration: 5,
     },
     {
         id: 18,
@@ -153,7 +152,7 @@ export const lyricSlots = [
         lyric: 'She did her best',
         startTime: 92,
         endTime: 97,
-        displayDuration: 5, // slide 18 (1:32 + 5s)
+        displayDuration: 5,
     },
     {
         id: 19,
@@ -161,7 +160,7 @@ export const lyricSlots = [
         lyric: 'To teach me right from wrong',
         startTime: 97,
         endTime: 103,
-        displayDuration: 6, // slide 19 (1:37 + 6s)
+        displayDuration: 6,
     },
     {
         id: 20,
@@ -169,7 +168,7 @@ export const lyricSlots = [
         lyric: 'And now my heart',
         startTime: 103,
         endTime: 108,
-        displayDuration: 5, // slide 20 (1:43 + 5s)
+        displayDuration: 5,
     },
     {
         id: 21,
@@ -177,7 +176,7 @@ export const lyricSlots = [
         lyric: 'Carries her loving song',
         startTime: 108,
         endTime: 113,
-        displayDuration: 5, // slide 21 (1:48 + 5s)
+        displayDuration: 5,
     },
     {
         id: 22,
@@ -185,7 +184,7 @@ export const lyricSlots = [
         lyric: 'My heart carries her loving song',
         startTime: 113,
         endTime: 117,
-        displayDuration: 4, // slide 22 (1:53 + 4s)
+        displayDuration: 4,
     },
     {
         id: 23,
@@ -193,7 +192,7 @@ export const lyricSlots = [
         lyric: 'Her loving song...',
         startTime: 117,
         endTime: 124,
-        displayDuration: 7, // slide 23 (1:57 -> 2:04)
+        displayDuration: 7,
     },
     {
         id: 24,
@@ -201,23 +200,21 @@ export const lyricSlots = [
         lyric: "Happy Mother's Day, Mom",
         startTime: 124,
         endTime: 130,
-        displayDuration: 6, // Outro slide
+        displayDuration: 6,
         isGenerated: true,
     },
 ];
 
-export const SONG_DURATION = 124; // Total duration: 2:04
+export const SONG_DURATION = 124;
 export const TOTAL_SLOTS = lyricSlots.length;
 export const SLIDE_DURATION = SONG_DURATION / TOTAL_SLOTS;
 
-// Get the current slot based on playback time
 export const getCurrentSlot = (currentTime) => {
     return lyricSlots.find(
         (slot) => currentTime >= slot.startTime && currentTime < slot.endTime
     ) || lyricSlots[0];
 };
 
-// Get progress within the current slot (0-1)
 export const getSlotProgress = (currentTime, slot) => {
     const elapsed = currentTime - slot.startTime;
     return Math.min(1, Math.max(0, elapsed / slot.displayDuration));
