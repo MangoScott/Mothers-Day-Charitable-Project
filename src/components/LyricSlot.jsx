@@ -188,7 +188,7 @@ export default function LyricSlot({ slot, index }) {
 
             {/* Photo Upload Area */}
             <div style={styles.photoArea}>
-                {(slot.type === 'intro' || slot.isGenerated) ? (
+                {(slot.type === 'intro' || slot.type === 'narrative' || slot.isGenerated) ? (
                     <div style={{
                         ...styles.uploadLabel,
                         background: '#fdf2f8',
@@ -201,7 +201,7 @@ export default function LyricSlot({ slot, index }) {
                             <Sparkles style={{ width: 28, height: 28, color: '#ec4899' }} />
                         </div>
                         <p style={{ ...styles.uploadText, color: '#be185d' }}>
-                            {slot.type === 'intro' ? 'Title Card' : 'Closing Card'}
+                            {slot.type === 'intro' ? 'Title Card' : slot.type === 'narrative' ? 'Narrative Card' : 'Closing Card'}
                         </p>
                         <p style={styles.uploadHint}>
                             Auto-generated text slide

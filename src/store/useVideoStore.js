@@ -66,15 +66,21 @@ const useVideoStore = create((set, get) => ({
 
     setCurrentTime: (currentTime) => set({ currentTime }),
 
-    // Computed helpers
+    // Computed helpers - only count verse slots that need photos
     getUploadedCount: () => {
         const { photos } = get();
-        return Object.values(photos).filter(Boolean).length;
+        const verseSlots = lyricSlots.filter(slot => slot.type === 'verse');
+        return verseSlots.filter(slot => photos[slot.id]).length;
     },
 
     hasAllPhotos: () => {
         const { photos } = get();
-        return Object.values(photos).every(Boolean);
+        const verseSlots = lyricSlots.filter(slot => slot.type === 'verse');
+        return verseSlots.every(slot => photos[slot.id]);
+    },
+
+    getRequiredPhotoCount: () => {
+        return lyricSlots.filter(slot => slot.type === 'verse').length;
     },
 
     getPhotoForSlot: (slotId) => {

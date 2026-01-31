@@ -8,9 +8,11 @@ export default function StoryBoard() {
     const photos = useVideoStore((state) => state.photos);
     const getUploadedCount = useVideoStore((state) => state.getUploadedCount);
     const hasAllPhotosFunc = useVideoStore((state) => state.hasAllPhotos);
+    const getRequiredPhotoCount = useVideoStore((state) => state.getRequiredPhotoCount);
     const setBulkPhotos = useVideoStore((state) => state.setBulkPhotos);
 
     const progress = getUploadedCount();
+    const requiredPhotos = getRequiredPhotoCount();
     const hasAllPhotos = hasAllPhotosFunc();
     const slots = lyricSlots;
 
@@ -260,7 +262,7 @@ export default function StoryBoard() {
                         </div>
                         <div style={styles.progressBlock}>
                             <p style={styles.progressLabel}>Progress</p>
-                            <p style={styles.progressCount}>{progress}/21</p>
+                            <p style={styles.progressCount}>{progress}/{requiredPhotos}</p>
                         </div>
                     </div>
 
@@ -269,7 +271,7 @@ export default function StoryBoard() {
                         <div
                             style={{
                                 ...styles.progressFill,
-                                width: `${(progress / 21) * 100}%`
+                                width: `${(progress / requiredPhotos) * 100}%`
                             }}
                         />
                     </div>
@@ -304,7 +306,7 @@ export default function StoryBoard() {
                         Upload All Photos at Once
                     </button>
                     <p style={styles.bulkUploadHint}>
-                        Select 21 photos in order, or add them individually below
+                        Select {requiredPhotos} photos in order, or add them individually below
                     </p>
                 </div>
 

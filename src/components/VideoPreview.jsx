@@ -222,7 +222,7 @@ const VideoPreview = () => {
                 { x: width / 2 - 350, y: height / 2 - 100, size: 25, opacity: 0.08, rotation: 10 },
                 { x: width / 2 + 380, y: height / 2 + 50, size: 28, opacity: 0.1, rotation: -10 },
             ];
-            
+
             heartPositions.forEach(heart => {
                 ctx.save();
                 ctx.translate(heart.x, heart.y);
@@ -250,7 +250,7 @@ const VideoPreview = () => {
             ctx.fillRect(width / 2 - 150, 80, 300, 4);
 
             ctx.textAlign = 'center';
-            
+
             // Small badge text
             ctx.fillStyle = '#9ca3af';
             ctx.font = '500 20px Inter, sans-serif';
@@ -260,7 +260,7 @@ const VideoPreview = () => {
             ctx.fillStyle = '#be185d';
             ctx.font = 'bold 72px Inter, sans-serif';
             ctx.fillText("A Mother's Day", width / 2, height / 2 - 50);
-            
+
             // "Story Card" with gradient emphasis
             const titleGradient = ctx.createLinearGradient(width / 2 - 200, 0, width / 2 + 200, 0);
             titleGradient.addColorStop(0, '#ec4899');
@@ -273,7 +273,7 @@ const VideoPreview = () => {
             // Subtitle with emphasis on "YOU"
             ctx.fillStyle = '#6b7280';
             ctx.font = '400 28px Inter, sans-serif';
-            ctx.fillText('made especially for', width / 2 - 40, height / 2 + 120);
+            ctx.fillText('made especially for ', width / 2 - 40, height / 2 + 120);
             ctx.fillStyle = '#ec4899';
             ctx.font = 'italic 600 32px Inter, sans-serif';
             ctx.fillText('YOU', width / 2 + 115, height / 2 + 120);
@@ -293,7 +293,63 @@ const VideoPreview = () => {
             return;
         }
 
-        // 2. Finale Slide - Premium Design
+        // 2. Narrative Slides (spoken intro before singing)
+        if (slot.type === 'narrative') {
+            // Soft gradient background
+            const bgGradient = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, width * 0.7);
+            bgGradient.addColorStop(0, 'rgba(252, 231, 243, 0.6)');
+            bgGradient.addColorStop(0.5, 'rgba(253, 242, 248, 0.4)');
+            bgGradient.addColorStop(1, 'rgba(255, 241, 242, 0.3)');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, width, height);
+
+            // Decorative hearts - subtle background
+            ctx.save();
+            const heartPositions = [
+                { x: 150, y: 180, size: 30, opacity: 0.1, rotation: -10 },
+                { x: width - 180, y: 200, size: 25, opacity: 0.08, rotation: 15 },
+                { x: 180, y: height - 220, size: 22, opacity: 0.08, rotation: -20 },
+                { x: width - 160, y: height - 200, size: 28, opacity: 0.1, rotation: 10 },
+            ];
+
+            heartPositions.forEach(heart => {
+                ctx.save();
+                ctx.translate(heart.x, heart.y);
+                ctx.rotate(heart.rotation * Math.PI / 180);
+                ctx.globalAlpha = heart.opacity;
+                ctx.fillStyle = '#ec4899';
+                ctx.beginPath();
+                const s = heart.size;
+                ctx.moveTo(0, -s * 0.3);
+                ctx.bezierCurveTo(s * 0.5, -s * 0.8, s, -s * 0.3, 0, s * 0.5);
+                ctx.bezierCurveTo(-s, -s * 0.3, -s * 0.5, -s * 0.8, 0, -s * 0.3);
+                ctx.fill();
+                ctx.restore();
+            });
+            ctx.restore();
+
+            // Center the narrative text
+            ctx.textAlign = 'center';
+
+            // Decorative quotation mark
+            ctx.fillStyle = 'rgba(236, 72, 153, 0.15)';
+            ctx.font = 'bold 200px Georgia, serif';
+            ctx.fillText('"', width / 2 - 300, height / 2 - 20);
+
+            // Main narrative text - italic, elegant
+            ctx.fillStyle = '#374151';
+            ctx.font = 'italic 48px Georgia, serif';
+            ctx.fillText(slot.lyric, width / 2, height / 2);
+
+            // Small label at bottom
+            ctx.fillStyle = '#9ca3af';
+            ctx.font = '18px Inter, sans-serif';
+            ctx.fillText('— spoken intro —', width / 2, height - 80);
+
+            return;
+        }
+
+        // 3. Finale Slide - Premium Design
         if (slot.isGenerated) {
             // Warm gradient background
             const finaleGradient = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, width * 0.6);
@@ -325,7 +381,7 @@ const VideoPreview = () => {
                 { x: 120, y: height / 2, size: 18, opacity: 0.12 },
                 { x: width - 130, y: height / 2 + 50, size: 20, opacity: 0.15 },
             ];
-            
+
             finaleHearts.forEach(heart => {
                 ctx.save();
                 ctx.translate(heart.x, heart.y);
@@ -341,12 +397,12 @@ const VideoPreview = () => {
             });
 
             ctx.textAlign = 'center';
-            
+
             // "Happy" with elegant styling
             ctx.fillStyle = '#be185d';
             ctx.font = '500 48px Inter, sans-serif';
             ctx.fillText('Happy', width / 2, height / 2 - 80);
-            
+
             // "Mother's Day" - main emphasis
             const finaleTextGradient = ctx.createLinearGradient(width / 2 - 250, 0, width / 2 + 250, 0);
             finaleTextGradient.addColorStop(0, '#ec4899');
@@ -355,12 +411,12 @@ const VideoPreview = () => {
             ctx.fillStyle = finaleTextGradient;
             ctx.font = 'bold 80px Inter, sans-serif';
             ctx.fillText("Mother's Day", width / 2, height / 2 + 10);
-            
+
             // "Mom" with heart
             ctx.fillStyle = '#6b7280';
             ctx.font = '400 36px Inter, sans-serif';
             ctx.fillText('to the best Mom ever', width / 2, height / 2 + 80);
-            
+
             // Heart emoji row
             ctx.font = '32px Inter, sans-serif';
             ctx.fillText('❤️  💕  ❤️', width / 2, height / 2 + 140);

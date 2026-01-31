@@ -182,7 +182,7 @@ const VideoRenderer = () => {
                         { x: 290, y: 260, size: 25, opacity: 0.08, rotation: 10 },
                         { x: 1020, y: 410, size: 28, opacity: 0.1, rotation: -10 },
                     ];
-                    
+
                     heartPositions.forEach(heart => {
                         ctx.save();
                         ctx.translate(heart.x, heart.y);
@@ -210,7 +210,7 @@ const VideoRenderer = () => {
                     ctx.fillRect(490, 80, 300, 4);
 
                     ctx.textAlign = 'center';
-                    
+
                     // Small badge text
                     ctx.fillStyle = '#9ca3af';
                     ctx.font = '500 20px Inter, sans-serif';
@@ -220,7 +220,7 @@ const VideoRenderer = () => {
                     ctx.fillStyle = '#be185d';
                     ctx.font = 'bold 72px Inter, sans-serif';
                     ctx.fillText("A Mother's Day", 640, 310);
-                    
+
                     // "Story Card" with gradient emphasis
                     const titleGradient = ctx.createLinearGradient(440, 0, 840, 0);
                     titleGradient.addColorStop(0, '#ec4899');
@@ -233,7 +233,7 @@ const VideoRenderer = () => {
                     // Subtitle with emphasis on "YOU"
                     ctx.fillStyle = '#6b7280';
                     ctx.font = '400 28px Inter, sans-serif';
-                    ctx.fillText('made especially for', 600, 480);
+                    ctx.fillText('made especially for ', 600, 480);
                     ctx.fillStyle = '#ec4899';
                     ctx.font = 'italic 600 32px Inter, sans-serif';
                     ctx.fillText('YOU', 755, 480);
@@ -251,7 +251,7 @@ const VideoRenderer = () => {
                     ctx.fillStyle = '#b4b4b4';
                     ctx.fillText('Designed by Scott Glasgow', 640, 688);
 
-                // 2. Finale Slide - Premium Design
+                    // 2. Finale Slide - Premium Design
                 } else if (slot.isGenerated) {
                     // Warm gradient background
                     const finaleGradient = ctx.createRadialGradient(640, 360, 0, 640, 360, 750);
@@ -283,7 +283,7 @@ const VideoRenderer = () => {
                         { x: 120, y: 360, size: 18, opacity: 0.12 },
                         { x: 1150, y: 410, size: 20, opacity: 0.15 },
                     ];
-                    
+
                     finaleHearts.forEach(heart => {
                         ctx.save();
                         ctx.translate(heart.x, heart.y);
@@ -299,12 +299,12 @@ const VideoRenderer = () => {
                     });
 
                     ctx.textAlign = 'center';
-                    
+
                     // "Happy" with elegant styling
                     ctx.fillStyle = '#be185d';
                     ctx.font = '500 48px Inter, sans-serif';
                     ctx.fillText('Happy', 640, 280);
-                    
+
                     // "Mother's Day" - main emphasis
                     const finaleTextGradient = ctx.createLinearGradient(390, 0, 890, 0);
                     finaleTextGradient.addColorStop(0, '#ec4899');
@@ -313,12 +313,12 @@ const VideoRenderer = () => {
                     ctx.fillStyle = finaleTextGradient;
                     ctx.font = 'bold 80px Inter, sans-serif';
                     ctx.fillText("Mother's Day", 640, 370);
-                    
+
                     // "Mom" with heart
                     ctx.fillStyle = '#6b7280';
                     ctx.font = '400 36px Inter, sans-serif';
                     ctx.fillText('to the best Mom ever', 640, 440);
-                    
+
                     // Heart emoji row
                     ctx.font = '32px Inter, sans-serif';
                     ctx.fillText('❤️  💕  ❤️', 640, 500);
