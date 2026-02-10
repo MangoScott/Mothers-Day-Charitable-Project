@@ -2,31 +2,32 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Play, Square, Save, RotateCcw, Check } from 'lucide-react';
 const audioFile = import.meta.env.BASE_URL + 'audio/wendys_song.mp3';
 
-// The lyrics to sync (without timings)
+// The lyrics to sync - must match lyricSlots structure in lyricsData.js
 const LYRICS_TO_SYNC = [
-    { type: 'intro', text: 'A Mother’s Day Story Card' },
-    { type: 'verse', text: 'For my hurt feelings' },
-    { type: 'verse', text: 'She offered sympathy' },
-    { type: 'verse', text: 'Through both the good times' },
-    { type: 'verse', text: 'And the bad' },
-    { type: 'verse', text: 'She was the one true friend' },
-    { type: 'verse', text: 'I always had' },
-    { type: 'verse', text: 'When I was sick' },
-    { type: 'verse', text: 'She stayed up through the night' },
-    { type: 'verse', text: 'She kissed my sores' },
-    { type: 'verse', text: 'And my tears away' },
-    { type: 'verse', text: 'Made time for me' },
-    { type: 'verse', text: 'During her busy day' },
+    { type: 'intro', text: "A Mother's Day Story Card" },
+    { type: 'narrative', text: "Hi, mom, it's me" },
+    { type: 'narrative', text: "I couldn't find the words to say" },
+    { type: 'narrative', text: 'just how much you mean to me' },
+    { type: 'narrative', text: 'so I wrote down how I feel in this song' },
+    { type: 'verse', text: 'For my hurt feelings, she offered sympathy' },
+    { type: 'verse', text: 'Through both the good times and the bad' },
+    { type: 'verse', text: 'She was the one true friend I always had' },
+    { type: 'verse', text: 'When I was sick, she stayed up through the night' },
+    { type: 'verse', text: 'She kissed my sores and my tears away' },
+    { type: 'verse', text: 'Made time for me during her busy day' },
     { type: 'verse', text: 'She sheltered me from all harm' },
     { type: 'verse', text: 'Through the years' },
     { type: 'verse', text: 'She kept me safe and warm' },
     { type: 'verse', text: 'When I was growing up' },
     { type: 'verse', text: 'She was always there' },
-    { type: 'verse', text: 'When I was bad' },
-    { type: 'verse', text: 'She was firm, but fair' },
-    { type: 'verse', text: 'She did her best to teach me right from wrong' },
-    { type: 'verse', text: 'And now, my heart carries her loving song' },
-    { type: 'outro', text: 'Happy Mother’s Day, Mom' }
+    { type: 'verse', text: 'When I was bad, she was firm but fair' },
+    { type: 'verse', text: 'She did her best' },
+    { type: 'verse', text: 'To teach me right from wrong' },
+    { type: 'verse', text: 'And now my heart' },
+    { type: 'verse', text: 'Carries her loving song' },
+    { type: 'verse', text: 'My heart carries her loving song' },
+    { type: 'verse', text: 'Her loving song...' },
+    { type: 'outro', text: "Happy Mother's Day, Mom" }
 ];
 
 export default function SyncTool({ onBack }) {
@@ -106,8 +107,8 @@ export default function SyncTool({ onBack }) {
 
     const generateCode = () => {
         const slots = timings.map((t, i) => {
-            const nextTime = timings[i + 1] ? timings[i + 1].time : 259; // Default to end of song
-            return {
+            const nextTime = timings[i + 1] ? timings[i + 1].time : 124.87;
+            const slot = {
                 id: i + 1,
                 type: t.lyric.type,
                 lyric: t.lyric.text,
@@ -115,6 +116,21 @@ export default function SyncTool({ onBack }) {
                 endTime: parseFloat(nextTime.toFixed(2)),
                 displayDuration: parseFloat((nextTime - t.time).toFixed(2))
             };
+
+            // Add special properties for intro
+            if (t.lyric.type === 'intro') {
+                slot.subLyric = 'made especially for YOU';
+                slot.editable = true;
+            }
+
+            // Add special properties for outro
+            if (t.lyric.type === 'outro') {
+                slot.endTime = 130;
+                slot.displayDuration = 6;
+                slot.isGenerated = true;
+            }
+
+            return slot;
         });
 
         return `export const lyricSlots = ${JSON.stringify(slots, null, 4)};`;
@@ -143,6 +159,11 @@ export default function SyncTool({ onBack }) {
                                         ? "Press START to Begin"
                                         : LYRICS_TO_SYNC[currentIndex]?.text}
                                 </h2>
+                                {currentIndex >= 0 && (
+                                    <span className="inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-gray-100 text-gray-500">
+                                        {LYRICS_TO_SYNC[currentIndex]?.type}
+                                    </span>
+                                )}
                                 {currentIndex >= 0 && (
                                     <div className="mt-8 pt-8 border-t border-gray-100 w-full animate-pulse opacity-60">
                                         <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Next Up</p>
