@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Play, Square, Save, RotateCcw, Check } from 'lucide-react';
 const audioFile = import.meta.env.BASE_URL + 'audio/wendys_song.mp3';
 
-// The lyrics to sync - must match lyricSlots structure in lyricsData.js
+// The lyrics to sync — must match the 24 slots in lyricsData.js exactly
 const LYRICS_TO_SYNC = [
     { type: 'intro', text: "A Mother's Day Story Card" },
     { type: 'narrative', text: "Hi, mom, it's me" },
@@ -27,7 +27,7 @@ const LYRICS_TO_SYNC = [
     { type: 'verse', text: 'Carries her loving song' },
     { type: 'verse', text: 'My heart carries her loving song' },
     { type: 'verse', text: 'Her loving song...' },
-    { type: 'outro', text: "Happy Mother's Day, Mom" }
+    { type: 'outro', text: "Happy Mother's Day, Mom" },
 ];
 
 export default function SyncTool({ onBack }) {

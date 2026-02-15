@@ -9,6 +9,7 @@ const VideoPreview = () => {
     const canvasRef = useRef(null);
     const audioRef = useRef(null);
     const animationRef = useRef(null);
+    const isPlayingRef = useRef(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
@@ -479,27 +480,29 @@ const VideoPreview = () => {
     }, [loadedImages, customTitle]);
 
     const animate = useCallback(() => {
-        if (!audioRef.current) return;
+        if (!audioRef.current || !isPlayingRef.current) return;
 
         const time = audioRef.current.currentTime;
         setCurrentTime(time);
         drawFrame(time);
 
-        if (isPlaying && time < SONG_DURATION) {
+        if (time < SONG_DURATION) {
             animationRef.current = requestAnimationFrame(animate);
+        } else {
+            // Song ended
+            isPlayingRef.current = false;
+            setIsPlaying(false);
         }
-    }, [isPlaying, drawFrame]);
+    }, [drawFrame]);
 
+    // Cleanup rAF on unmount
     useEffect(() => {
-        if (isPlaying) {
-            animationRef.current = requestAnimationFrame(animate);
-        }
         return () => {
             if (animationRef.current) {
                 cancelAnimationFrame(animationRef.current);
             }
         };
-    }, [isPlaying, animate]);
+    }, []);
 
     useEffect(() => {
         if (Object.keys(loadedImages).length > 0) {
@@ -510,14 +513,20 @@ const VideoPreview = () => {
     const handlePlayPause = () => {
         if (!audioRef.current) return;
 
-        if (isPlaying) {
+        if (isPlayingRef.current) {
             audioRef.current.pause();
+            isPlayingRef.current = false;
             setIsPlaying(false);
+            if (animationRef.current) {
+                cancelAnimationFrame(animationRef.current);
+            }
         } else {
             audioRef.current.play().catch((e) => {
                 console.warn('Audio playback failed:', e);
             });
+            isPlayingRef.current = true;
             setIsPlaying(true);
+            animationRef.current = requestAnimationFrame(animate);
         }
     };
 
@@ -535,10 +544,14 @@ const VideoPreview = () => {
     };
 
     const handleReset = () => {
+        if (animationRef.current) {
+            cancelAnimationFrame(animationRef.current);
+        }
         if (audioRef.current) {
             audioRef.current.pause();
             audioRef.current.currentTime = 0;
         }
+        isPlayingRef.current = false;
         setIsPlaying(false);
         setCurrentTime(0);
         drawFrame(0);
@@ -643,14 +656,8 @@ const VideoPreview = () => {
                 <audio
                     ref={audioRef}
                     src={audioPath}
+                    preload="auto"
                     onEnded={handleReset}
-                    onTimeUpdate={() => {
-                        if (audioRef.current) {
-                            const time = audioRef.current.currentTime;
-                            setCurrentTime(time);
-                            drawFrame(time);
-                        }
-                    }}
                 />
             </div>
         </div>
