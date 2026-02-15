@@ -482,6 +482,13 @@ const VideoPreview = () => {
     const animate = useCallback(() => {
         if (!audioRef.current || !isPlayingRef.current) return;
 
+        // Double-check audio is actually playing
+        if (audioRef.current.paused) {
+            isPlayingRef.current = false;
+            setIsPlaying(false);
+            return;
+        }
+
         const time = audioRef.current.currentTime;
         setCurrentTime(time);
         drawFrame(time);
@@ -514,19 +521,47 @@ const VideoPreview = () => {
         if (!audioRef.current) return;
 
         if (isPlayingRef.current) {
+            // Pause
             audioRef.current.pause();
             isPlayingRef.current = false;
             setIsPlaying(false);
             if (animationRef.current) {
                 cancelAnimationFrame(animationRef.current);
+                animationRef.current = null;
             }
         } else {
-            audioRef.current.play().catch((e) => {
-                console.warn('Audio playback failed:', e);
-            });
-            isPlayingRef.current = true;
-            setIsPlaying(true);
-            animationRef.current = requestAnimationFrame(animate);
+            // Play — wait for audio to be ready before starting animation
+            const startPlayback = () => {
+                // Cancel any existing animation loop first
+                if (animationRef.current) {
+                    cancelAnimationFrame(animationRef.current);
+                    animationRef.current = null;
+                }
+                isPlayingRef.current = true;
+                setIsPlaying(true);
+                animationRef.current = requestAnimationFrame(animate);
+            };
+
+            const audio = audioRef.current;
+            if (audio.readyState >= 4) {
+                // Audio is fully buffered, play immediately
+                audio.play().then(startPlayback).catch((e) => {
+                    console.warn('Audio playback failed:', e);
+                });
+            } else {
+                // Wait for audio to buffer enough
+                setIsPlaying(true); // Show loading state
+                const onReady = () => {
+                    audio.removeEventListener('canplaythrough', onReady);
+                    audio.play().then(startPlayback).catch((e) => {
+                        console.warn('Audio playback failed:', e);
+                        isPlayingRef.current = false;
+                        setIsPlaying(false);
+                    });
+                };
+                audio.addEventListener('canplaythrough', onReady);
+                audio.load(); // Force load
+            }
         }
     };
 
