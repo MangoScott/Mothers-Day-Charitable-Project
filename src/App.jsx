@@ -12,14 +12,10 @@ function App() {
 
   const renderScreen = () => {
     switch (currentScreen) {
-      case 'landing':
-        return <LandingScreen />;
-      case 'storyboard':
-        return <StoryBoard />;
-      case 'preview':
-        return <VideoPreview />;
-      case 'rendering':
-        return <VideoRenderer />;
+      case 'landing':    return <LandingScreen />;
+      case 'storyboard': return <StoryBoard />;
+      case 'preview':    return <VideoPreview />;
+      case 'rendering':  return <VideoRenderer />;
       case 'sync':
         return <SyncTool onBack={() => useVideoStore.setState({ currentScreen: 'landing' })} />;
       default:
@@ -28,154 +24,35 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Main content */}
+    <div className="relative min-h-screen overflow-hidden bg-white">
       <main className="relative z-10">
         {renderScreen()}
       </main>
 
-      {/* Premium Footer */}
-      <footer className="relative z-10">
-        <style>{`
-          .footer-container {
-            position: relative;
-            padding: 48px 24px 32px;
-            background: linear-gradient(180deg, transparent 0%, rgba(253, 242, 248, 0.8) 100%);
-          }
-          
-          .footer-accent-line {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 3px;
-            background: linear-gradient(90deg, #ec4899, #f472b6, #fbbf24);
-            border-radius: 2px;
-            opacity: 0.6;
-          }
-          
-          .footer-content {
-            max-width: 700px;
-            margin: 0 auto;
-            text-align: center;
-          }
-          
-          .footer-main-text {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            margin-bottom: 20px;
-          }
-          
-          .footer-heart-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ec4899, #f472b6);
-            box-shadow: 0 0 12px rgba(236, 72, 153, 0.4);
-            animation: footerPulse 2s ease-in-out infinite;
-          }
-          
-          .footer-heart-dot:nth-child(3) {
-            animation-delay: 0.3s;
-          }
-          
-          @keyframes footerPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-          }
-          
-          .footer-tagline {
-            font-size: 15px;
-            font-weight: 600;
-            color: #4b5563;
-            margin: 0;
-            letter-spacing: 0.01em;
-          }
-          
-          .footer-credits {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 13px;
-            color: #9ca3af;
-          }
-          
-          .footer-credits span {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-          }
-          
-          .footer-separator {
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: #d1d5db;
-          }
-          
-          .footer-link {
-            color: #9ca3af;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-          }
-          
-          .footer-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: linear-gradient(90deg, #ec4899, #f472b6);
-            transition: width 0.3s ease;
-          }
-          
-          .footer-link:hover {
-            color: #ec4899;
-          }
-          
-          .footer-link:hover::after {
-            width: 100%;
-          }
-          
-          .footer-project-name {
-            font-weight: 600;
-            color: #6b7280;
-          }
-          
-          @media (max-width: 600px) {
-            .footer-credits {
-              flex-direction: column;
-              gap: 6px;
-            }
-            .footer-separator {
-              display: none;
-            }
-          }
-        `}</style>
-
-        <div className="footer-container">
-          <div className="footer-accent-line" />
-          <div className="footer-content">
-            <div className="footer-main-text">
-              <div className="footer-heart-dot" />
-              <p className="footer-tagline">Made with love for moms everywhere</p>
-              <div className="footer-heart-dot" />
+      <footer className="relative z-10 border-t border-ink-100 bg-gradient-to-b from-transparent to-[#FFF5F7]/70">
+        <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8">
+          <div className="flex flex-col items-center gap-6 text-center">
+            <div className="flex items-center gap-3">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-500 animate-pulse-soft" />
+              <p className="text-[13px] font-semibold text-ink-700">
+                Made with love for moms everywhere
+              </p>
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-500 animate-pulse-soft" />
             </div>
-            <div className="footer-credits">
-              <span className="footer-project-name">The Wendy's Song Project</span>
-              <div className="footer-separator" />
-              <span>A Charitable Initiative</span>
-              <div className="footer-separator" />
-              <span>© 1986/2026 Kim Coleman Uhlik and Wendy Emerick</span>
-              <div className="footer-separator" />
-              <a href="https://sglasgow.com" target="_blank" rel="noopener noreferrer" className="footer-link">
+
+            <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-[12px] text-ink-400">
+              <span className="font-semibold text-ink-500">The Wendy's Song Project</span>
+              <span aria-hidden className="hidden h-1 w-1 rounded-full bg-ink-300 sm:inline-block" />
+              <span>A charitable initiative</span>
+              <span aria-hidden className="hidden h-1 w-1 rounded-full bg-ink-300 sm:inline-block" />
+              <span>© 1986 / 2026 Kim Coleman Uhlik &amp; Wendy Emerick</span>
+              <span aria-hidden className="hidden h-1 w-1 rounded-full bg-ink-300 sm:inline-block" />
+              <a
+                href="https://sglasgow.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-ink-500 hover:text-brand-600"
+              >
                 Designed by Scott Glasgow
               </a>
             </div>

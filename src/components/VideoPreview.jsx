@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { ArrowLeft, Play, Pause, RotateCcw, Download } from 'lucide-react';
 import useVideoStore from '../store/useVideoStore';
 import { lyricSlots, getCurrentSlot, getSlotProgress, SONG_DURATION } from '../utils/lyricsData';
 
@@ -14,154 +15,6 @@ const VideoPreview = () => {
     const [currentTime, setCurrentTime] = useState(0);
     const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
     const [loadedImages, setLoadedImages] = useState({});
-
-    const styles = {
-        container: {
-            minHeight: '100vh',
-            padding: '24px 16px',
-            background: 'linear-gradient(180deg, #fdf2f8 0%, #ffffff 100%)',
-        },
-        inner: {
-            maxWidth: '900px',
-            margin: '0 auto',
-        },
-        header: {
-            background: 'rgba(255, 255, 255, 0.9)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '20px',
-            padding: '20px 24px',
-            marginBottom: '24px',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
-            border: '1px solid #f3f4f6',
-        },
-        backButton: {
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontSize: '0.875rem',
-            color: '#6b7280',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            marginBottom: '8px',
-            padding: 0,
-        },
-        title: {
-            fontSize: '1.75rem',
-            fontWeight: '700',
-            color: '#111827',
-            margin: 0,
-        },
-        videoCard: {
-            background: 'rgba(255, 255, 255, 0.9)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '20px',
-            padding: '24px',
-            marginBottom: '24px',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
-            border: '1px solid #f3f4f6',
-        },
-        canvasWrapper: {
-            aspectRatio: '16 / 9',
-            background: '#fdf2f8',
-            borderRadius: '16px',
-            overflow: 'hidden',
-            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.08)',
-        },
-        canvas: {
-            width: '100%',
-            height: '100%',
-            display: 'block',
-        },
-        lyricIndicator: {
-            marginTop: '16px',
-            textAlign: 'center',
-        },
-        lyricLabel: {
-            fontSize: '0.75rem',
-            color: '#9ca3af',
-            fontWeight: '500',
-        },
-        lyricText: {
-            fontSize: '1.125rem',
-            color: '#374151',
-            fontStyle: 'italic',
-            marginTop: '4px',
-        },
-        controlsCard: {
-            background: 'rgba(255, 255, 255, 0.9)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '20px',
-            padding: '24px',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
-            border: '1px solid #f3f4f6',
-        },
-        progressBar: {
-            height: '8px',
-            background: '#f3f4f6',
-            borderRadius: '9999px',
-            overflow: 'hidden',
-            cursor: 'pointer',
-            marginBottom: '16px',
-        },
-        progressFill: {
-            height: '100%',
-            background: 'linear-gradient(90deg, #ec4899, #f43f5e)',
-            borderRadius: '9999px',
-            transition: 'width 0.1s ease',
-        },
-        timeRow: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            fontSize: '0.875rem',
-            color: '#6b7280',
-            marginBottom: '20px',
-        },
-        buttonRow: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '16px',
-        },
-        controlButton: {
-            width: '48px',
-            height: '48px',
-            borderRadius: '50%',
-            background: 'white',
-            border: '1px solid #e5e7eb',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-        },
-        playButton: {
-            width: '64px',
-            height: '64px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #ec4899, #f43f5e)',
-            border: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            boxShadow: '0 8px 20px rgba(236, 72, 153, 0.3)',
-            transition: 'all 0.2s ease',
-        },
-        generateButton: {
-            width: '48px',
-            height: '48px',
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #10b981, #059669)',
-            border: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
-            transition: 'all 0.2s ease',
-        },
-    };
 
     // Preload all images
     useEffect(() => {
@@ -205,7 +58,6 @@ const VideoPreview = () => {
 
         // 1. Title Slide - Premium Design
         if (slot.id === 1) {
-            // Decorative gradient background overlay
             const bgGradient = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, width * 0.7);
             bgGradient.addColorStop(0, 'rgba(252, 231, 243, 0.6)');
             bgGradient.addColorStop(0.5, 'rgba(253, 242, 248, 0.4)');
@@ -213,7 +65,6 @@ const VideoPreview = () => {
             ctx.fillStyle = bgGradient;
             ctx.fillRect(0, 0, width, height);
 
-            // Decorative hearts - scattered around
             ctx.save();
             const heartPositions = [
                 { x: 120, y: 150, size: 40, opacity: 0.15, rotation: -15 },
@@ -240,7 +91,6 @@ const VideoPreview = () => {
             });
             ctx.restore();
 
-            // Decorative top accent line
             const accentGradient = ctx.createLinearGradient(width / 2 - 150, 0, width / 2 + 150, 0);
             accentGradient.addColorStop(0, 'transparent');
             accentGradient.addColorStop(0.2, '#ec4899');
@@ -252,17 +102,14 @@ const VideoPreview = () => {
 
             ctx.textAlign = 'center';
 
-            // Small badge text
             ctx.fillStyle = '#9ca3af';
             ctx.font = '500 20px Inter, sans-serif';
             ctx.fillText('✦  A Charitable Project  ✦', width / 2, height / 2 - 130);
 
-            // Main Title
             ctx.fillStyle = '#be185d';
             ctx.font = 'bold 72px Inter, sans-serif';
             ctx.fillText("A Mother's Day", width / 2, height / 2 - 50);
 
-            // "Story Card" with gradient emphasis
             const titleGradient = ctx.createLinearGradient(width / 2 - 200, 0, width / 2 + 200, 0);
             titleGradient.addColorStop(0, '#ec4899');
             titleGradient.addColorStop(0.5, '#f43f5e');
@@ -271,7 +118,6 @@ const VideoPreview = () => {
             ctx.font = 'bold 88px Inter, sans-serif';
             ctx.fillText('Story Card', width / 2, height / 2 + 50);
 
-            // Subtitle with emphasis on "YOU"
             ctx.fillStyle = '#6b7280';
             ctx.font = '400 28px Inter, sans-serif';
             ctx.fillText('made especially for', width / 2 - 40, height / 2 + 120);
@@ -279,11 +125,9 @@ const VideoPreview = () => {
             ctx.font = 'italic 600 32px Inter, sans-serif';
             ctx.fillText('YOU', width / 2 + 115, height / 2 + 120);
 
-            // Bottom decorative line
             ctx.fillStyle = accentGradient;
             ctx.fillRect(width / 2 - 100, height - 100, 200, 3);
 
-            // Copyright & Design - styled footer
             ctx.textAlign = 'center';
             ctx.fillStyle = '#9ca3af';
             ctx.font = '14px Inter, sans-serif';
@@ -294,7 +138,7 @@ const VideoPreview = () => {
             return;
         }
 
-        // 2. Narrative Slides (spoken intro before singing)
+        // 2. Narrative Slides
         if (slot.type === 'narrative') {
             const bgGradient = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, width * 0.7);
             bgGradient.addColorStop(0, 'rgba(252, 231, 243, 0.6)');
@@ -343,9 +187,8 @@ const VideoPreview = () => {
             return;
         }
 
-        // 3. Finale Slide - Premium Design
+        // 3. Finale Slide
         if (slot.isGenerated) {
-            // Warm gradient background
             const finaleGradient = ctx.createRadialGradient(width / 2, height / 2, 0, width / 2, height / 2, width * 0.6);
             finaleGradient.addColorStop(0, 'rgba(254, 205, 211, 0.5)');
             finaleGradient.addColorStop(0.5, 'rgba(252, 231, 243, 0.4)');
@@ -353,7 +196,6 @@ const VideoPreview = () => {
             ctx.fillStyle = finaleGradient;
             ctx.fillRect(0, 0, width, height);
 
-            // Large decorative heart in center background
             ctx.save();
             ctx.translate(width / 2, height / 2 - 30);
             ctx.globalAlpha = 0.08;
@@ -366,7 +208,6 @@ const VideoPreview = () => {
             ctx.fill();
             ctx.restore();
 
-            // Scattered small hearts
             const finaleHearts = [
                 { x: 180, y: 200, size: 25, opacity: 0.2 },
                 { x: width - 200, y: 220, size: 30, opacity: 0.18 },
@@ -392,12 +233,10 @@ const VideoPreview = () => {
 
             ctx.textAlign = 'center';
 
-            // "Happy" with elegant styling
             ctx.fillStyle = '#be185d';
             ctx.font = '500 48px Inter, sans-serif';
             ctx.fillText('Happy', width / 2, height / 2 - 80);
 
-            // "Mother's Day" - main emphasis
             const finaleTextGradient = ctx.createLinearGradient(width / 2 - 250, 0, width / 2 + 250, 0);
             finaleTextGradient.addColorStop(0, '#ec4899');
             finaleTextGradient.addColorStop(0.5, '#f43f5e');
@@ -406,16 +245,13 @@ const VideoPreview = () => {
             ctx.font = 'bold 80px Inter, sans-serif';
             ctx.fillText("Mother's Day", width / 2, height / 2 + 10);
 
-            // "Mom" with heart
             ctx.fillStyle = '#6b7280';
             ctx.font = '400 36px Inter, sans-serif';
             ctx.fillText('to the best Mom ever', width / 2, height / 2 + 80);
 
-            // Heart emoji row
             ctx.font = '32px Inter, sans-serif';
             ctx.fillText('❤️  💕  ❤️', width / 2, height / 2 + 140);
 
-            // Bottom accent
             const bottomAccent = ctx.createLinearGradient(width / 2 - 80, 0, width / 2 + 80, 0);
             bottomAccent.addColorStop(0, 'transparent');
             bottomAccent.addColorStop(0.3, '#f472b6');
@@ -426,7 +262,7 @@ const VideoPreview = () => {
             return;
         }
 
-        // 3. Standard Photo Slots
+        // 4. Standard Photo Slots
         const img = loadedImages[slot.id];
         if (img) {
             const slotProgress = getSlotProgress(time, slot);
@@ -440,7 +276,6 @@ const VideoPreview = () => {
 
             ctx.globalAlpha = opacity;
 
-            // Cover the canvas while maintaining aspect ratio
             const imgAspect = img.width / img.height;
             const canvasAspect = width / height;
             let drawWidth, drawHeight, drawX, drawY;
@@ -466,7 +301,7 @@ const VideoPreview = () => {
             ctx.fillText('No photo for this scene', width / 2, height / 2);
         }
 
-        // Lyric Overlay
+        // Lyric overlay
         if (slot.lyric) {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
             ctx.fillRect(0, height - 100, width, 100);
@@ -482,7 +317,6 @@ const VideoPreview = () => {
     const animate = useCallback(() => {
         if (!audioRef.current || !isPlayingRef.current) return;
 
-        // Double-check audio is actually playing
         if (audioRef.current.paused) {
             isPlayingRef.current = false;
             setIsPlaying(false);
@@ -496,18 +330,14 @@ const VideoPreview = () => {
         if (time < SONG_DURATION) {
             animationRef.current = requestAnimationFrame(animate);
         } else {
-            // Song ended
             isPlayingRef.current = false;
             setIsPlaying(false);
         }
     }, [drawFrame]);
 
-    // Cleanup rAF on unmount
     useEffect(() => {
         return () => {
-            if (animationRef.current) {
-                cancelAnimationFrame(animationRef.current);
-            }
+            if (animationRef.current) cancelAnimationFrame(animationRef.current);
         };
     }, []);
 
@@ -521,7 +351,6 @@ const VideoPreview = () => {
         if (!audioRef.current) return;
 
         if (isPlayingRef.current) {
-            // Pause
             audioRef.current.pause();
             isPlayingRef.current = false;
             setIsPlaying(false);
@@ -530,9 +359,7 @@ const VideoPreview = () => {
                 animationRef.current = null;
             }
         } else {
-            // Play — wait for audio to be ready before starting animation
             const startPlayback = () => {
-                // Cancel any existing animation loop first
                 if (animationRef.current) {
                     cancelAnimationFrame(animationRef.current);
                     animationRef.current = null;
@@ -544,13 +371,11 @@ const VideoPreview = () => {
 
             const audio = audioRef.current;
             if (audio.readyState >= 4) {
-                // Audio is fully buffered, play immediately
                 audio.play().then(startPlayback).catch((e) => {
                     console.warn('Audio playback failed:', e);
                 });
             } else {
-                // Wait for audio to buffer enough
-                setIsPlaying(true); // Show loading state
+                setIsPlaying(true);
                 const onReady = () => {
                     audio.removeEventListener('canplaythrough', onReady);
                     audio.play().then(startPlayback).catch((e) => {
@@ -560,7 +385,7 @@ const VideoPreview = () => {
                     });
                 };
                 audio.addEventListener('canplaythrough', onReady);
-                audio.load(); // Force load
+                audio.load();
             }
         }
     };
@@ -571,17 +396,13 @@ const VideoPreview = () => {
         const percent = x / rect.width;
         const time = percent * SONG_DURATION;
 
-        if (audioRef.current) {
-            audioRef.current.currentTime = time;
-        }
+        if (audioRef.current) audioRef.current.currentTime = time;
         setCurrentTime(time);
         drawFrame(time);
     };
 
     const handleReset = () => {
-        if (animationRef.current) {
-            cancelAnimationFrame(animationRef.current);
-        }
+        if (animationRef.current) cancelAnimationFrame(animationRef.current);
         if (audioRef.current) {
             audioRef.current.pause();
             audioRef.current.currentTime = 0;
@@ -600,94 +421,136 @@ const VideoPreview = () => {
 
     const currentSlot = lyricSlots[currentSlotIndex];
     const audioPath = import.meta.env.BASE_URL + 'audio/wendys_song.mp3';
+    const progressPercent = (currentTime / SONG_DURATION) * 100;
 
     return (
-        <div style={styles.container}>
-            <div style={styles.inner}>
+        <div className="relative min-h-screen bg-gradient-to-b from-[#FFF8FA] via-white to-[#FFF1F2] pb-16 text-ink-900">
+            <div className="aurora opacity-50" aria-hidden />
+
+            <div className="relative z-10 mx-auto max-w-5xl px-5 pt-10 sm:px-8 sm:pt-14">
                 {/* Header */}
-                <div style={styles.header}>
+                <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
                     <button
                         onClick={() => setScreen('storyboard')}
-                        style={styles.backButton}
+                        className="inline-flex h-10 items-center gap-2 rounded-full border border-ink-200 bg-white/80 px-4 text-sm font-semibold text-ink-700 backdrop-blur hover:border-ink-300 hover:bg-white"
                     >
-                        <svg style={{ width: 16, height: 16 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                        Back to Storyboard
+                        <ArrowLeft className="h-4 w-4" />
+                        Back to storyboard
                     </button>
-                    <h1 style={styles.title}>Preview Your Video</h1>
-                </div>
-
-                {/* Video Canvas */}
-                <div style={styles.videoCard}>
-                    <div style={styles.canvasWrapper}>
-                        <canvas
-                            ref={canvasRef}
-                            width={1280}
-                            height={720}
-                            style={styles.canvas}
-                        />
-                    </div>
-
-                    <div style={styles.lyricIndicator}>
-                        <span style={styles.lyricLabel}>Now showing:</span>
-                        <p style={styles.lyricText}>"{currentSlot?.editable ? customTitle : currentSlot?.lyric}"</p>
+                    <div className="text-right">
+                        <p className="text-[11px] font-semibold uppercase tracking-wider text-brand-600">
+                            Preview
+                        </p>
+                        <h1 className="text-2xl font-extrabold tracking-display text-ink-900 sm:text-3xl">
+                            Watch your tribute
+                        </h1>
                     </div>
                 </div>
 
-                {/* Controls */}
-                <div style={styles.controlsCard}>
-                    <div
-                        style={styles.progressBar}
-                        onClick={handleSeek}
-                    >
-                        <div style={{ ...styles.progressFill, width: `${(currentTime / SONG_DURATION) * 100}%` }} />
+                {/* Player card */}
+                <div className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/85 shadow-card backdrop-blur-xl animate-scale-in">
+                    {/* Video frame */}
+                    <div className="relative bg-ink-900">
+                        <div className="aspect-video w-full">
+                            <canvas
+                                ref={canvasRef}
+                                width={1280}
+                                height={720}
+                                className="h-full w-full"
+                            />
+                        </div>
+
+                        {/* Floating play button overlay when paused */}
+                        {!isPlaying && (
+                            <button
+                                onClick={handlePlayPause}
+                                className="absolute inset-0 grid place-items-center bg-black/0 hover:bg-black/10"
+                                aria-label="Play"
+                            >
+                                <span className="grid h-20 w-20 place-items-center rounded-full bg-white/95 text-brand-600 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.45)] backdrop-blur transition-spring hover:scale-105">
+                                    <Play className="h-8 w-8 translate-x-0.5" fill="currentColor" />
+                                </span>
+                            </button>
+                        )}
                     </div>
 
-                    <div style={styles.timeRow}>
-                        <span>{formatTime(currentTime)}</span>
-                        <span>{formatTime(SONG_DURATION)}</span>
+                    {/* Now playing strip */}
+                    <div className="flex items-center gap-3 border-b border-ink-100 bg-ink-50/50 px-6 py-4">
+                        <span className="grid h-2 w-2 place-items-center">
+                            <span className={`h-2 w-2 rounded-full bg-brand-500 ${isPlaying ? 'animate-ping' : ''}`} />
+                        </span>
+                        <p className="text-[12px] font-semibold uppercase tracking-wider text-ink-500">
+                            Now playing
+                        </p>
+                        <p className="font-display text-[15px] italic text-ink-800">
+                            “{currentSlot?.editable ? customTitle : currentSlot?.lyric}”
+                        </p>
                     </div>
 
-                    <div style={styles.buttonRow}>
-                        <button
-                            onClick={handleReset}
-                            style={styles.controlButton}
-                            title="Reset"
+                    {/* Controls */}
+                    <div className="px-6 py-5 sm:px-8 sm:py-6">
+                        {/* Progress */}
+                        <div
+                            className="group relative h-2 cursor-pointer rounded-full bg-ink-100"
+                            onClick={handleSeek}
+                            role="slider"
+                            aria-valuemin={0}
+                            aria-valuemax={SONG_DURATION}
+                            aria-valuenow={currentTime}
                         >
-                            <svg style={{ width: 20, height: 20, color: '#374151' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                        </button>
+                            <div
+                                className="relative h-full rounded-full bg-gradient-to-r from-brand-500 via-brand-600 to-orange-500"
+                                style={{ width: `${progressPercent}%` }}
+                            >
+                                <span className="absolute -right-1.5 top-1/2 grid h-4 w-4 -translate-y-1/2 place-items-center rounded-full bg-white shadow ring-2 ring-brand-500 opacity-0 transition-opacity group-hover:opacity-100" />
+                            </div>
+                        </div>
 
-                        <button
-                            onClick={handlePlayPause}
-                            style={styles.playButton}
-                        >
-                            {isPlaying ? (
-                                <svg style={{ width: 28, height: 28, color: 'white' }} fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-                                </svg>
-                            ) : (
-                                <svg style={{ width: 28, height: 28, color: 'white', marginLeft: 4 }} fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z" />
-                                </svg>
-                            )}
-                        </button>
+                        <div className="mt-2 flex items-center justify-between text-[13px] font-medium tabular text-ink-500">
+                            <span>{formatTime(currentTime)}</span>
+                            <span>{formatTime(SONG_DURATION)}</span>
+                        </div>
 
-                        <button
-                            onClick={() => setScreen('rendering')}
-                            style={styles.generateButton}
-                            title="Generate Video"
-                        >
-                            <svg style={{ width: 20, height: 20, color: 'white' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
-                        </button>
+                        {/* Buttons */}
+                        <div className="mt-5 flex items-center justify-center gap-4">
+                            <button
+                                onClick={handleReset}
+                                className="grid h-12 w-12 place-items-center rounded-full border border-ink-200 bg-white text-ink-700 hover:border-ink-300 hover:bg-ink-50"
+                                title="Reset"
+                                aria-label="Reset"
+                            >
+                                <RotateCcw className="h-5 w-5" />
+                            </button>
+
+                            <button
+                                onClick={handlePlayPause}
+                                className="grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-brand-500 via-brand-600 to-orange-500 text-white shadow-glow-brand transition-spring hover:scale-105 active:scale-100"
+                                aria-label={isPlaying ? 'Pause' : 'Play'}
+                            >
+                                {isPlaying ? (
+                                    <Pause className="h-7 w-7" fill="currentColor" />
+                                ) : (
+                                    <Play className="h-7 w-7 translate-x-0.5" fill="currentColor" />
+                                )}
+                            </button>
+
+                            <button
+                                onClick={() => setScreen('rendering')}
+                                className="grid h-12 w-12 place-items-center rounded-full bg-emerald-600 text-white shadow-[0_10px_30px_-10px_rgba(5,150,105,0.5)] hover:scale-105"
+                                title="Generate video"
+                                aria-label="Generate video"
+                            >
+                                <Download className="h-5 w-5" />
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                {/* Audio Element */}
+                {/* Helper text */}
+                <p className="mt-6 text-center text-[13px] text-ink-500">
+                    Tip — you can scrub the timeline to jump to any moment.
+                </p>
+
                 <audio
                     ref={audioRef}
                     src={audioPath}
