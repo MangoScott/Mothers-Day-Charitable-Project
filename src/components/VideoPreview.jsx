@@ -58,8 +58,12 @@ const VideoPreview = () => {
     const isPlayingRef = useRef(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
-    const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
     const [loadedImages, setLoadedImages] = useState({});
+
+    // Derived: which slot is currently showing. Always consistent with
+    // currentTime so the "Now playing" text and the canvas overlay can never
+    // disagree at slot boundaries.
+    const currentSlot = getCurrentSlot(currentTime);
 
     // Preload all images
     useEffect(() => {
@@ -91,8 +95,6 @@ const VideoPreview = () => {
         const height = canvas.height;
 
         const slot = getCurrentSlot(time);
-        const slotIndex = lyricSlots.findIndex((s) => s.id === slot.id);
-        setCurrentSlotIndex(slotIndex);
 
         // Clear canvas with gradient
         const gradient = ctx.createLinearGradient(0, 0, 0, height);
@@ -472,7 +474,6 @@ const VideoPreview = () => {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    const currentSlot = lyricSlots[currentSlotIndex];
     const audioPath = import.meta.env.BASE_URL + 'audio/wendys_song.mp3';
     const progressPercent = (currentTime / SONG_DURATION) * 100;
 
