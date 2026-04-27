@@ -3,21 +3,17 @@ import React from 'react';
 const ProgressBar = ({ progress, message }) => {
     return (
         <div className="w-full">
-            {/* Progress bar container */}
-            <div className="h-4 bg-white/70 rounded-full overflow-hidden shadow-inner mb-3">
+            <div className="relative h-2 overflow-hidden rounded-full bg-ink-100">
                 <div
-                    className="h-full bg-gradient-to-r from-highlight via-accent to-rose-400 rounded-full transition-all duration-300 ease-out relative"
+                    className="relative h-full rounded-full bg-gradient-to-r from-brand-500 via-brand-600 to-orange-500 transition-all duration-500 ease-spring"
                     style={{ width: `${progress}%` }}
                 >
-                    {/* Shimmer effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
+                    <span className="absolute inset-0 -translate-x-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent)] animate-[shimmer-keyframes_2.6s_linear_infinite]" />
                 </div>
             </div>
-
-            {/* Progress text */}
-            <div className="flex justify-between items-center text-sm">
-                <span className="text-warm/70">{message || 'Processing...'}</span>
-                <span className="font-medium text-accent">{progress}%</span>
+            <div className="mt-2 flex items-center justify-between text-[13px] tabular">
+                <span className="text-ink-500">{message || 'Processing…'}</span>
+                <span className="font-semibold text-ink-800">{progress}%</span>
             </div>
         </div>
     );

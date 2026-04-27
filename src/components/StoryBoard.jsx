@@ -1,11 +1,10 @@
-import { ArrowLeft, Eye, Upload, ImagePlus } from 'lucide-react';
 import { useRef } from 'react';
+import { ArrowLeft, Eye, Upload, Download, ImagePlus, CheckCircle2 } from 'lucide-react';
 import useVideoStore from '../store/useVideoStore';
 import LyricSlot from './LyricSlot';
 import { lyricSlots } from '../utils/lyricsData';
 
 export default function StoryBoard() {
-    const photos = useVideoStore((state) => state.photos);
     const getUploadedCount = useVideoStore((state) => state.getUploadedCount);
     const hasAllPhotosFunc = useVideoStore((state) => state.hasAllPhotos);
     const getRequiredPhotoCount = useVideoStore((state) => state.getRequiredPhotoCount);
@@ -15,349 +14,175 @@ export default function StoryBoard() {
     const requiredPhotos = getRequiredPhotoCount();
     const hasAllPhotos = hasAllPhotosFunc();
     const slots = lyricSlots;
+    const percent = Math.round((progress / requiredPhotos) * 100);
 
     const bulkInputRef = useRef(null);
 
-    const handleGoBack = () => {
-        useVideoStore.setState({ currentScreen: 'landing' });
-    };
-
-    const handlePreview = () => {
-        useVideoStore.setState({ currentScreen: 'preview' });
-    };
-
-    const handleGenerate = () => {
-        if (hasAllPhotos) {
-            useVideoStore.setState({ currentScreen: 'rendering' });
-        }
-    };
+    const goTo = (screen) => useVideoStore.setState({ currentScreen: screen });
 
     const handleBulkUpload = (event) => {
         const files = Array.from(event.target.files);
         if (files.length === 0) return;
 
-        // Sort files by name to maintain order
         files.sort((a, b) => a.name.localeCompare(b.name));
 
-        const photoPromises = files.map((file) => {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = () => resolve(null);
-                reader.readAsDataURL(file);
-            });
-        });
+        const photoPromises = files.map((file) => new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(file);
+        }));
 
         Promise.all(photoPromises).then((photoDataArray) => {
             const validPhotos = photoDataArray.filter(Boolean);
-            if (validPhotos.length > 0) {
-                setBulkPhotos(validPhotos);
-            }
+            if (validPhotos.length > 0) setBulkPhotos(validPhotos);
         });
 
-        // Reset input so same files can be selected again
         event.target.value = '';
     };
 
-    const styles = {
-        container: {
-            minHeight: '100vh',
-            background: 'linear-gradient(180deg, #fdf2f8 0%, #ffffff 100%)',
-        },
-        header: {
-            position: 'sticky',
-            top: 0,
-            zIndex: 20,
-            background: 'rgba(255, 255, 255, 0.95)',
-            backdropFilter: 'blur(12px)',
-            borderBottom: '1px solid #f3f4f6',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)',
-        },
-        headerInner: {
-            maxWidth: '1280px',
-            margin: '0 auto',
-            padding: '20px 24px',
-        },
-        headerTop: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '16px',
-        },
-        headerLeft: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: '20px',
-        },
-        backButton: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '10px 16px',
-            background: 'white',
-            border: '1px solid #e5e7eb',
-            borderRadius: '12px',
-            color: '#374151',
-            fontWeight: '500',
-            fontSize: '14px',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-        },
-        titleBlock: {},
-        title: {
-            fontSize: '1.75rem',
-            fontWeight: '700',
-            color: '#111827',
-            margin: 0,
-        },
-        subtitle: {
-            fontSize: '0.875rem',
-            color: '#6b7280',
-            margin: '4px 0 0 0',
-        },
-        progressBlock: {
-            textAlign: 'right',
-        },
-        progressLabel: {
-            fontSize: '0.875rem',
-            color: '#6b7280',
-            margin: '0 0 4px 0',
-        },
-        progressCount: {
-            fontSize: '2rem',
-            fontWeight: '700',
-            background: 'linear-gradient(135deg, #ec4899, #f43f5e)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            margin: 0,
-        },
-        progressBar: {
-            height: '8px',
-            background: '#f3f4f6',
-            borderRadius: '9999px',
-            overflow: 'hidden',
-        },
-        progressFill: {
-            height: '100%',
-            background: 'linear-gradient(90deg, #ec4899, #f43f5e)',
-            borderRadius: '9999px',
-            transition: 'width 0.4s ease',
-        },
-        main: {
-            maxWidth: '1280px',
-            margin: '0 auto',
-            padding: '40px 24px 120px',
-        },
-        grid: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-            gap: '24px',
-        },
-        bulkUploadSection: {
-            marginBottom: '32px',
-            display: 'flex',
-            gap: '16px',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-        },
-        bulkUploadButton: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            padding: '14px 24px',
-            background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-            border: 'none',
-            borderRadius: '14px',
-            color: 'white',
-            fontWeight: '600',
-            fontSize: '0.95rem',
-            cursor: 'pointer',
-            boxShadow: '0 8px 24px rgba(59, 130, 246, 0.3)',
-            transition: 'all 0.2s ease',
-        },
-        bulkUploadHint: {
-            fontSize: '0.875rem',
-            color: '#6b7280',
-            fontStyle: 'italic',
-        },
-        actionBar: {
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            zIndex: 20,
-            background: 'rgba(255, 255, 255, 0.95)',
-            backdropFilter: 'blur(12px)',
-            borderTop: '1px solid #f3f4f6',
-            boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.05)',
-        },
-        actionBarInner: {
-            maxWidth: '1280px',
-            margin: '0 auto',
-            padding: '20px 24px',
-            display: 'flex',
-            gap: '16px',
-            justifyContent: 'center',
-        },
-        previewButton: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            padding: '16px 28px',
-            background: 'white',
-            border: '2px solid #e5e7eb',
-            borderRadius: '14px',
-            color: '#374151',
-            fontWeight: '600',
-            fontSize: '1rem',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-        },
-        generateButton: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            padding: '16px 32px',
-            background: hasAllPhotos
-                ? 'linear-gradient(135deg, #ec4899, #f43f5e)'
-                : '#e5e7eb',
-            border: 'none',
-            borderRadius: '14px',
-            color: hasAllPhotos ? 'white' : '#9ca3af',
-            fontWeight: '600',
-            fontSize: '1rem',
-            cursor: hasAllPhotos ? 'pointer' : 'not-allowed',
-            boxShadow: hasAllPhotos ? '0 10px 30px rgba(236, 72, 153, 0.3)' : 'none',
-            transition: 'all 0.2s ease',
-        },
-    };
-
     return (
-        <div style={styles.container}>
-            {/* Header */}
-            <header style={styles.header}>
-                <div style={styles.headerInner}>
-                    <div style={styles.headerTop}>
-                        <div style={styles.headerLeft}>
+        <div className="relative min-h-screen bg-gradient-to-b from-[#FFF8FA] via-white to-white pb-32 text-ink-900">
+            {/* Soft aurora background */}
+            <div className="aurora opacity-60" aria-hidden />
+
+            {/* ============= Sticky header ============= */}
+            <header className="sticky top-0 z-30 border-b border-ink-100/80 bg-white/75 backdrop-blur-xl">
+                <div className="mx-auto max-w-7xl px-5 py-4 sm:px-8">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
                             <button
-                                onClick={handleGoBack}
-                                style={styles.backButton}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.background = '#f9fafb';
-                                    e.currentTarget.style.borderColor = '#d1d5db';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.background = 'white';
-                                    e.currentTarget.style.borderColor = '#e5e7eb';
-                                }}
+                                onClick={() => goTo('landing')}
+                                className="inline-flex h-10 items-center gap-2 rounded-full border border-ink-200 bg-white px-4 text-sm font-semibold text-ink-700 hover:border-ink-300 hover:bg-ink-50"
                             >
-                                <ArrowLeft style={{ width: 18, height: 18 }} />
+                                <ArrowLeft className="h-4 w-4" />
                                 Back
                             </button>
-                            <div style={styles.titleBlock}>
-                                <h1 style={styles.title}>Your Storyboard</h1>
-                                <p style={styles.subtitle}>Add photos to bring your story to life</p>
+                            <div>
+                                <h1 className="text-xl font-extrabold tracking-tight text-ink-900 sm:text-2xl">
+                                    Your storyboard
+                                </h1>
+                                <p className="text-[13px] text-ink-500">
+                                    Add a photo for each lyric — drag-and-drop or click to upload
+                                </p>
                             </div>
                         </div>
-                        <div style={styles.progressBlock}>
-                            <p style={styles.progressLabel}>Progress</p>
-                            <p style={styles.progressCount}>{progress}/{requiredPhotos}</p>
+
+                        <div className="flex items-center gap-4">
+                            {hasAllPhotos && (
+                                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[12px] font-semibold text-emerald-700 ring-1 ring-emerald-100">
+                                    <CheckCircle2 className="h-3.5 w-3.5" /> All set
+                                </span>
+                            )}
+                            <div className="text-right">
+                                <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-400">
+                                    Progress
+                                </p>
+                                <p className="font-extrabold tabular text-2xl">
+                                    <span className="text-brand-gradient">{progress}</span>
+                                    <span className="text-ink-300"> / {requiredPhotos}</span>
+                                </p>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Progress Bar */}
-                    <div style={styles.progressBar}>
+                    {/* Progress bar */}
+                    <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-ink-100">
                         <div
-                            style={{
-                                ...styles.progressFill,
-                                width: `${(progress / requiredPhotos) * 100}%`
-                            }}
-                        />
+                            className="relative h-full rounded-full bg-gradient-to-r from-brand-500 via-brand-600 to-orange-500 transition-all duration-500 ease-spring"
+                            style={{ width: `${percent}%` }}
+                        >
+                            <div className="absolute inset-0 -translate-x-full bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent)] animate-[shimmer-keyframes_2.6s_linear_infinite]" />
+                        </div>
                     </div>
                 </div>
             </header>
 
-            {/* Photo Grid */}
-            <main style={styles.main}>
-                {/* Bulk Upload Section */}
-                <div style={styles.bulkUploadSection}>
-                    <input
-                        ref={bulkInputRef}
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={handleBulkUpload}
-                        style={{ display: 'none' }}
-                    />
-                    <button
-                        onClick={() => bulkInputRef.current?.click()}
-                        style={styles.bulkUploadButton}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                            e.currentTarget.style.boxShadow = '0 12px 32px rgba(59, 130, 246, 0.4)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = '0 8px 24px rgba(59, 130, 246, 0.3)';
-                        }}
-                    >
-                        <Upload style={{ width: 20, height: 20 }} />
-                        Upload All Photos at Once
-                    </button>
-                    <p style={styles.bulkUploadHint}>
-                        Select {requiredPhotos} photos in order, or add them individually below
-                    </p>
+            {/* ============= Main ============= */}
+            <main className="relative z-10 mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
+                {/* Bulk upload hero */}
+                <div className="mb-10 overflow-hidden rounded-3xl border border-ink-200/70 bg-white/80 p-6 shadow-card backdrop-blur sm:p-8">
+                    <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-center gap-5">
+                            <div className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-brand-50 to-rose-100 ring-1 ring-inset ring-brand-100">
+                                <ImagePlus className="h-6 w-6 text-brand-600" />
+                            </div>
+                            <div>
+                                <h2 className="text-lg font-bold tracking-tight text-ink-900">
+                                    Upload all photos at once
+                                </h2>
+                                <p className="mt-1 text-sm text-ink-600">
+                                    Pick up to {requiredPhotos} photos in order — we'll place them in the right scenes.
+                                </p>
+                            </div>
+                        </div>
+
+                        <input
+                            ref={bulkInputRef}
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={handleBulkUpload}
+                            className="hidden"
+                        />
+                        <button
+                            onClick={() => bulkInputRef.current?.click()}
+                            className="group inline-flex h-12 items-center gap-2 rounded-full bg-ink-900 px-6 text-sm font-semibold text-white transition-spring hover:-translate-y-0.5 hover:bg-ink-800"
+                        >
+                            <Upload className="h-4 w-4" />
+                            Choose photos
+                            <span className="ml-1 hidden text-ink-300 group-hover:text-white sm:inline">→</span>
+                        </button>
+                    </div>
                 </div>
 
-                <div style={styles.grid}>
+                {/* Slot grid */}
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {slots.map((slot, index) => (
                         <LyricSlot key={slot.id} slot={slot} index={index} />
                     ))}
                 </div>
             </main>
 
-            {/* Action Bar */}
-            <footer style={styles.actionBar}>
-                <div style={styles.actionBarInner}>
-                    <button
-                        onClick={handlePreview}
-                        style={styles.previewButton}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.background = '#f9fafb';
-                            e.currentTarget.style.borderColor = '#d1d5db';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.background = 'white';
-                            e.currentTarget.style.borderColor = '#e5e7eb';
-                        }}
-                    >
-                        <Eye style={{ width: 20, height: 20 }} />
-                        Preview Video
-                    </button>
+            {/* ============= Sticky action bar ============= */}
+            <footer className="fixed bottom-0 left-0 right-0 z-30 border-t border-ink-100/80 bg-white/85 backdrop-blur-xl">
+                <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-4 sm:px-8">
+                    <div className="hidden items-center gap-3 text-sm text-ink-500 sm:flex">
+                        <div className="flex h-9 items-center gap-2 rounded-full border border-ink-200 bg-white px-3 text-[13px] font-semibold text-ink-700">
+                            <span className="tabular">{progress}</span>
+                            <span className="text-ink-300">/</span>
+                            <span className="tabular text-ink-500">{requiredPhotos}</span>
+                            photos added
+                        </div>
+                        {!hasAllPhotos && (
+                            <span className="text-[13px]">
+                                Add {requiredPhotos - progress} more to generate your video
+                            </span>
+                        )}
+                    </div>
 
-                    <button
-                        onClick={handleGenerate}
-                        disabled={!hasAllPhotos}
-                        style={styles.generateButton}
-                        onMouseEnter={(e) => {
-                            if (hasAllPhotos) {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 14px 40px rgba(236, 72, 153, 0.4)';
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (hasAllPhotos) {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 10px 30px rgba(236, 72, 153, 0.3)';
-                            }
-                        }}
-                    >
-                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        Generate & Download
-                    </button>
+                    <div className="ml-auto flex w-full items-center gap-3 sm:w-auto">
+                        <button
+                            onClick={() => goTo('preview')}
+                            className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full border border-ink-200 bg-white px-5 text-sm font-semibold text-ink-800 hover:border-ink-300 hover:bg-ink-50 sm:flex-none"
+                        >
+                            <Eye className="h-4 w-4" />
+                            Preview
+                        </button>
+                        <button
+                            onClick={() => hasAllPhotos && goTo('rendering')}
+                            disabled={!hasAllPhotos}
+                            className={[
+                                'inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold transition-spring sm:flex-none',
+                                hasAllPhotos
+                                    ? 'bg-gradient-to-r from-brand-500 via-brand-600 to-orange-500 text-white shadow-glow-soft hover:-translate-y-0.5 hover:shadow-glow-brand'
+                                    : 'cursor-not-allowed bg-ink-100 text-ink-400',
+                            ].join(' ')}
+                        >
+                            <Download className="h-4 w-4" />
+                            Generate video
+                        </button>
+                    </div>
                 </div>
             </footer>
         </div>

@@ -1,5 +1,12 @@
-import { Image, X, Edit3, Sparkles } from 'lucide-react';
+import { ImagePlus, X, Edit3, Sparkles, Heart } from 'lucide-react';
 import useVideoStore from '../store/useVideoStore';
+
+const TYPE_LABELS = {
+    intro: 'Title card',
+    narrative: 'Spoken intro',
+    verse: 'Verse',
+    outro: 'Closing card',
+};
 
 export default function LyricSlot({ slot, index }) {
     const setPhoto = useVideoStore((state) => state.setPhoto);
@@ -10,288 +17,119 @@ export default function LyricSlot({ slot, index }) {
 
     const imageUrl = getPhotoForSlot(slot.id);
     const isEditable = slot.editable === true;
+    const isAutoSlide = slot.type === 'intro' || slot.type === 'narrative' || slot.isGenerated;
+    const typeLabel = TYPE_LABELS[slot.type] ?? slot.type;
 
     const handleFileUpload = (e) => {
         const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setPhoto(slot.id, event.target?.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const handleRemoveImage = () => {
-        removePhoto(slot.id);
-    };
-
-    const handleTitleChange = (e) => {
-        setCustomTitle(e.target.value);
-    };
-
-    const styles = {
-        card: {
-            background: 'white',
-            borderRadius: '20px',
-            overflow: 'hidden',
-            border: '2px solid #f3f4f6',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)',
-            transition: 'all 0.3s ease',
-        },
-        cardHover: {
-            borderColor: '#fbcfe8',
-            boxShadow: '0 8px 30px rgba(236, 72, 153, 0.1)',
-        },
-        header: {
-            padding: '14px 20px',
-            background: 'linear-gradient(135deg, #fdf2f8, #fce7f3)',
-            borderBottom: '1px solid #fce7f3',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        sceneLabel: {
-            fontSize: '0.875rem',
-            fontWeight: '700',
-            color: '#111827',
-            margin: 0,
-        },
-        sceneBadge: {
-            padding: '4px 10px',
-            background: 'white',
-            borderRadius: '8px',
-            fontSize: '0.75rem',
-            fontWeight: '600',
-            color: '#ec4899',
-        },
-        photoArea: {
-            position: 'relative',
-            aspectRatio: '16 / 9',
-            background: '#f9fafb',
-        },
-        image: {
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-        },
-        removeButton: {
-            position: 'absolute',
-            top: '12px',
-            right: '12px',
-            width: '36px',
-            height: '36px',
-            background: 'white',
-            border: 'none',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            transition: 'all 0.2s ease',
-        },
-        uploadLabel: {
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-        },
-        uploadIcon: {
-            width: '64px',
-            height: '64px',
-            background: '#f3f4f6',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '12px',
-            transition: 'all 0.2s ease',
-        },
-        uploadText: {
-            fontSize: '1rem',
-            fontWeight: '600',
-            color: '#374151',
-            margin: '0 0 4px 0',
-        },
-        uploadHint: {
-            fontSize: '0.875rem',
-            color: '#9ca3af',
-            margin: 0,
-        },
-        lyrics: {
-            padding: '16px 20px',
-            background: 'white',
-            borderTop: '1px solid #f3f4f6',
-        },
-        lyricsText: {
-            fontSize: '0.9375rem',
-            color: '#4b5563',
-            fontStyle: 'italic',
-            lineHeight: 1.6,
-            margin: 0,
-        },
-        titleInputWrapper: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-        },
-        titleInput: {
-            flex: 1,
-            fontSize: '0.9375rem',
-            color: '#111827',
-            fontWeight: '600',
-            padding: '10px 14px',
-            border: '2px solid #fce7f3',
-            borderRadius: '10px',
-            background: '#fdf2f8',
-            outline: 'none',
-            transition: 'all 0.2s ease',
-        },
-        editIcon: {
-            color: '#ec4899',
-            flexShrink: 0,
-        },
-        editHint: {
-            fontSize: '0.75rem',
-            color: '#9ca3af',
-            marginTop: '6px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-        },
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => setPhoto(slot.id, event.target?.result);
+        reader.readAsDataURL(file);
     };
 
     return (
-        <div
-            style={styles.card}
-            onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#fbcfe8';
-                e.currentTarget.style.boxShadow = '0 8px 30px rgba(236, 72, 153, 0.1)';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = '#f3f4f6';
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.04)';
-                e.currentTarget.style.transform = 'translateY(0)';
-            }}
-        >
+        <article className="group relative overflow-hidden rounded-3xl border border-ink-200/70 bg-white shadow-card transition-spring hover:-translate-y-1 hover:border-brand-100 hover:shadow-card-hover">
             {/* Header */}
-            <div style={styles.header}>
-                <h3 style={styles.sceneLabel}>Scene {index + 1}</h3>
-                <span style={styles.sceneBadge}>{slot.type}</span>
+            <div className="flex items-center justify-between gap-3 border-b border-ink-100 px-5 py-3">
+                <div className="flex items-center gap-2.5">
+                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-ink-900 text-[11px] font-bold text-white tabular">
+                        {index + 1}
+                    </span>
+                    <p className="text-[13px] font-semibold text-ink-800">
+                        Scene {index + 1}
+                    </p>
+                </div>
+                <span
+                    className={[
+                        'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider',
+                        slot.type === 'verse'
+                            ? 'bg-brand-50 text-brand-700 ring-1 ring-brand-100'
+                            : 'bg-amber-50 text-amber-700 ring-1 ring-amber-100',
+                    ].join(' ')}
+                >
+                    {typeLabel}
+                </span>
             </div>
 
-            {/* Photo Upload Area */}
-            <div style={styles.photoArea}>
-                {(slot.type === 'intro' || slot.type === 'narrative' || slot.isGenerated) ? (
-                    <div style={{
-                        ...styles.uploadLabel,
-                        background: '#fdf2f8',
-                        cursor: 'default'
-                    }}>
-                        <div style={{
-                            ...styles.uploadIcon,
-                            background: '#fce7f3'
-                        }}>
-                            <Sparkles style={{ width: 28, height: 28, color: '#ec4899' }} />
+            {/* Photo area */}
+            <div className="relative aspect-video bg-ink-50">
+                {isAutoSlide ? (
+                    <div className="grid h-full place-items-center bg-gradient-to-br from-brand-50 via-rose-50 to-amber-50 text-center">
+                        <div>
+                            <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-white/80 shadow-sm ring-1 ring-brand-100">
+                                {slot.isGenerated ? (
+                                    <Heart className="h-5 w-5 text-brand-500" fill="currentColor" />
+                                ) : (
+                                    <Sparkles className="h-5 w-5 text-brand-500" />
+                                )}
+                            </div>
+                            <p className="mt-3 text-sm font-semibold text-brand-700">
+                                {slot.isGenerated ? 'Closing card' : slot.type === 'intro' ? 'Title card' : 'Narrative card'}
+                            </p>
+                            <p className="mt-0.5 text-[12px] text-ink-500">
+                                Auto-generated text slide
+                            </p>
                         </div>
-                        <p style={{ ...styles.uploadText, color: '#be185d' }}>
-                            {slot.type === 'intro' ? 'Title Card' : slot.type === 'narrative' ? 'Narrative Card' : 'Closing Card'}
-                        </p>
-                        <p style={styles.uploadHint}>
-                            Auto-generated text slide
-                        </p>
                     </div>
                 ) : imageUrl ? (
                     <>
                         <img
                             src={imageUrl}
                             alt={`Scene ${index + 1}`}
-                            style={styles.image}
+                            className="h-full w-full object-cover"
                         />
                         <button
-                            onClick={handleRemoveImage}
-                            style={styles.removeButton}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.background = '#fef2f2';
-                                e.currentTarget.style.color = '#ef4444';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'white';
-                                e.currentTarget.style.color = '#374151';
-                            }}
+                            onClick={() => removePhoto(slot.id)}
+                            className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-white/95 text-ink-600 shadow-md backdrop-blur hover:bg-white hover:text-rose-600"
+                            aria-label="Remove photo"
                         >
-                            <X style={{ width: 18, height: 18 }} />
+                            <X className="h-4 w-4" />
                         </button>
                     </>
                 ) : (
-                    <label
-                        style={styles.uploadLabel}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.background = '#fdf2f8';
-                            const iconDiv = e.currentTarget.querySelector('.upload-icon');
-                            if (iconDiv) {
-                                iconDiv.style.background = '#fce7f3';
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.background = 'transparent';
-                            const iconDiv = e.currentTarget.querySelector('.upload-icon');
-                            if (iconDiv) {
-                                iconDiv.style.background = '#f3f4f6';
-                            }
-                        }}
-                    >
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileUpload}
-                            style={{ display: 'none' }}
-                        />
-                        <div className="upload-icon" style={styles.uploadIcon}>
-                            <Image style={{ width: 28, height: 28, color: '#9ca3af' }} />
+                    <label className="group/upload absolute inset-0 grid cursor-pointer place-items-center bg-ink-50 text-ink-500 hover:bg-brand-50/60 hover:text-brand-600">
+                        <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+                        <div className="text-center">
+                            <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-white shadow-sm ring-1 ring-ink-200 transition-spring group-hover/upload:ring-brand-200 group-hover/upload:shadow-glow-soft">
+                                <ImagePlus className="h-6 w-6" />
+                            </div>
+                            <p className="mt-3 text-sm font-semibold text-ink-700 group-hover/upload:text-brand-700">
+                                Add photo
+                            </p>
+                            <p className="text-[12px] text-ink-400">PNG, JPG up to 10MB</p>
                         </div>
-                        <p style={styles.uploadText}>Add Photo</p>
-                        <p style={styles.uploadHint}>Click to upload</p>
                     </label>
                 )}
             </div>
 
-            {/* Lyrics or Editable Title */}
-            <div style={styles.lyrics}>
+            {/* Lyric / editable title */}
+            <div className="px-5 py-4">
                 {isEditable ? (
-                    <>
-                        <div style={styles.titleInputWrapper}>
-                            <Edit3 style={{ ...styles.editIcon, width: 16, height: 16 }} />
+                    <div>
+                        <label className="text-[11px] font-semibold uppercase tracking-wider text-ink-400">
+                            Title
+                        </label>
+                        <div className="mt-1.5 flex items-center gap-2 rounded-xl border border-ink-200 bg-white px-3 py-2 transition-spring focus-within:border-brand-300 focus-within:shadow-glow-soft">
+                            <Edit3 className="h-4 w-4 shrink-0 text-brand-500" />
                             <input
                                 type="text"
                                 value={customTitle}
-                                onChange={handleTitleChange}
-                                placeholder="Enter your title..."
-                                style={styles.titleInput}
-                                onFocus={(e) => {
-                                    e.target.style.borderColor = '#ec4899';
-                                    e.target.style.background = '#fff';
-                                }}
-                                onBlur={(e) => {
-                                    e.target.style.borderColor = '#fce7f3';
-                                    e.target.style.background = '#fdf2f8';
-                                }}
+                                onChange={(e) => setCustomTitle(e.target.value)}
+                                placeholder="Enter your title…"
+                                className="w-full bg-transparent text-sm font-semibold text-ink-900 outline-none placeholder:text-ink-300"
                             />
                         </div>
-                        <p style={styles.editHint}>
-                            ✨ This title will appear as the opening text in your video
+                        <p className="mt-2 text-[12px] text-ink-500">
+                            Appears as the opening text in your video
                         </p>
-                    </>
+                    </div>
                 ) : (
-                    <p style={styles.lyricsText}>"{slot.lyric}"</p>
+                    <p className="font-display text-[15px] italic leading-relaxed text-ink-700">
+                        “{slot.lyric}”
+                    </p>
                 )}
             </div>
-        </div>
+        </article>
     );
 }
