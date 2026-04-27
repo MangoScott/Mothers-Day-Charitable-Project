@@ -1,0 +1,221 @@
+[
+  {
+    "id": 1,
+    "type": "intro",
+    "lyric": "A Mother's Day Story Card",
+    "start": 0.0,
+    "anchor": null,
+    "end": 7.4,
+    "duration": 7.4,
+    "editable": true,
+    "subLyric": "made especially for YOU"
+  },
+  {
+    "id": 2,
+    "type": "narrative",
+    "lyric": "Hi, mom, it's me.",
+    "start": 7.4,
+    "anchor": "Hi",
+    "end": 10.44,
+    "duration": 3.04
+  },
+  {
+    "id": 3,
+    "type": "narrative",
+    "lyric": "Sometimes it's hard for me to say it face to face,\nabout how I've left you all along.",
+    "start": 10.44,
+    "anchor": "Sometimes",
+    "end": 15.78,
+    "duration": 5.34
+  },
+  {
+    "id": 4,
+    "type": "narrative",
+    "lyric": "Now that Mother's Day is near,\nit's easier for me to say",
+    "start": 15.78,
+    "anchor": "Now",
+    "end": 18.74,
+    "duration": 2.96
+  },
+  {
+    "id": 5,
+    "type": "narrative",
+    "lyric": "how I feel in this song.",
+    "start": 18.74,
+    "anchor": "how",
+    "end": 24.24,
+    "duration": 5.5
+  },
+  {
+    "id": 6,
+    "type": "verse",
+    "lyric": "Those tender tears my mother shed for me,",
+    "start": 24.24,
+    "anchor": "Those",
+    "end": 29.76,
+    "duration": 5.52
+  },
+  {
+    "id": 7,
+    "type": "verse",
+    "lyric": "for my hurt feelings she offered sympathy.",
+    "start": 29.76,
+    "anchor": "For",
+    "end": 35.68,
+    "duration": 5.92
+  },
+  {
+    "id": 8,
+    "type": "verse",
+    "lyric": "Through both the good times and the bad,",
+    "start": 35.68,
+    "anchor": "Through",
+    "end": 39.46,
+    "duration": 3.78
+  },
+  {
+    "id": 9,
+    "type": "verse",
+    "lyric": "she was the one true friend I always had.",
+    "start": 39.46,
+    "anchor": "she",
+    "end": 45.52,
+    "duration": 6.06
+  },
+  {
+    "id": 10,
+    "type": "verse",
+    "lyric": "When I was scared, she'd say it'll be alright.",
+    "start": 45.52,
+    "anchor": "When",
+    "end": 50.62,
+    "duration": 5.1
+  },
+  {
+    "id": 11,
+    "type": "verse",
+    "lyric": "When I was sick, she stayed up through the night.",
+    "start": 50.62,
+    "anchor": "When",
+    "end": 56.12,
+    "duration": 5.5
+  },
+  {
+    "id": 12,
+    "type": "verse",
+    "lyric": "She kissed my sores and my tears away,",
+    "start": 56.12,
+    "anchor": "She",
+    "end": 61.0,
+    "duration": 4.88
+  },
+  {
+    "id": 13,
+    "type": "verse",
+    "lyric": "made time for me during her busy day.",
+    "start": 61.0,
+    "anchor": "Made",
+    "end": 66.86,
+    "duration": 5.86
+  },
+  {
+    "id": 14,
+    "type": "verse",
+    "lyric": "She sheltered me from all harm",
+    "start": 66.86,
+    "anchor": "She",
+    "end": 71.1,
+    "duration": 4.24
+  },
+  {
+    "id": 15,
+    "type": "verse",
+    "lyric": "through the years, she kept me safe and warm.",
+    "start": 71.1,
+    "anchor": "through",
+    "end": 77.52,
+    "duration": 6.42
+  },
+  {
+    "id": 16,
+    "type": "verse",
+    "lyric": "When I was growing up, she was always there.",
+    "start": 77.52,
+    "anchor": "When",
+    "end": 82.12,
+    "duration": 4.6
+  },
+  {
+    "id": 17,
+    "type": "verse",
+    "lyric": "When I was bad, she was firm but fair.",
+    "start": 82.12,
+    "anchor": "When",
+    "end": 87.26,
+    "duration": 5.14
+  },
+  {
+    "id": 18,
+    "type": "verse",
+    "lyric": "She did her best to teach me right from wrong.",
+    "start": 87.26,
+    "anchor": "She",
+    "end": 92.14,
+    "duration": 4.88
+  },
+  {
+    "id": 19,
+    "type": "verse",
+    "lyric": "And now my heart carries her loving song.",
+    "start": 92.14,
+    "anchor": "And",
+    "end": 97.68,
+    "duration": 5.54
+  },
+  {
+    "id": 20,
+    "type": "verse",
+    "lyric": "Thanks for loving what you gave to me.",
+    "start": 97.68,
+    "anchor": "Thanks",
+    "end": 103.04,
+    "duration": 5.36
+  },
+  {
+    "id": 21,
+    "type": "verse",
+    "lyric": "Thanks for not giving up when I was mean as I could be.",
+    "start": 103.04,
+    "anchor": "Thanks",
+    "end": 108.64,
+    "duration": 5.6
+  },
+  {
+    "id": 22,
+    "type": "verse",
+    "lyric": "Mom, I love you more than words can say.",
+    "start": 108.64,
+    "anchor": "Mom",
+    "end": 113.42,
+    "duration": 4.78
+  },
+  {
+    "id": 23,
+    "type": "verse",
+    "lyric": "And this is your song on Mother's Day.",
+    "start": 113.42,
+    "anchor": "And",
+    "end": 119.18,
+    "duration": 5.76
+  },
+  {
+    "id": 24,
+    "type": "outro",
+    "lyric": "Happy Mother's Day, Mom",
+    "start": 119.18,
+    "anchor": null,
+    "end": 124.83,
+    "duration": 5.65,
+    "isGenerated": true
+  }
+]

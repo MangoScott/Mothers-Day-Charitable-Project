@@ -1,0 +1,106 @@
+====================================================================================================
+LYRIC ALIGNMENT REPORT
+====================================================================================================
+  #  type          start      end    dur   lyric
+----------------------------------------------------------------------------------------------------
+  1  intro          0.00     7.40   7.40   A Mother's Day Story Card
+  2  narrative      7.40    10.44   3.04   Hi, mom, it's me.
+  3  narrative     10.44    15.78   5.34   Sometimes it's hard for me to say it face to face, | about how I've left you all along.
+  4  narrative     15.78    18.74   2.96   Now that Mother's Day is near, | it's easier for me to say
+  5  narrative     18.74    24.24   5.50   how I feel in this song.
+  6  verse         24.24    29.76   5.52   Those tender tears my mother shed for me,
+  7  verse         29.76    35.68   5.92   for my hurt feelings she offered sympathy.
+  8  verse         35.68    39.46   3.78   Through both the good times and the bad,
+  9  verse         39.46    45.52   6.06   she was the one true friend I always had.
+ 10  verse         45.52    50.62   5.10   When I was scared, she'd say it'll be alright.
+ 11  verse         50.62    56.12   5.50   When I was sick, she stayed up through the night.
+ 12  verse         56.12    61.00   4.88   She kissed my sores and my tears away,
+ 13  verse         61.00    66.86   5.86   made time for me during her busy day.
+ 14  verse         66.86    71.10   4.24   She sheltered me from all harm
+ 15  verse         71.10    77.52   6.42   through the years, she kept me safe and warm.
+ 16  verse         77.52    82.12   4.60   When I was growing up, she was always there.
+ 17  verse         82.12    87.26   5.14   When I was bad, she was firm but fair.
+ 18  verse         87.26    92.14   4.88   She did her best to teach me right from wrong.
+ 19  verse         92.14    97.68   5.54   And now my heart carries her loving song.
+ 20  verse         97.68   103.04   5.36   Thanks for loving what you gave to me.
+ 21  verse        103.04   108.64   5.60   Thanks for not giving up when I was mean as I could be.
+ 22  verse        108.64   113.42   4.78   Mom, I love you more than words can say.
+ 23  verse        113.42   119.18   5.76   And this is your song on Mother's Day.
+ 24  outro        119.18   124.83   5.65   Happy Mother's Day, Mom
+
+====================================================================================================
+SUNG-WORDS-IN-RANGE  (sanity check)
+====================================================================================================
+  slot  1  (  0.00-  7.40)  sung: (instrumental)
+            displayed: A Mother's Day Story Card
+
+  slot  2  (  7.40- 10.44)  sung: Hi mom it's me.
+            displayed: Hi, mom, it's me.
+
+  slot  3  ( 10.44- 15.78)  sung: Sometimes it's hard for me to say it face to face about how I've left you all along.
+            displayed: Sometimes it's hard for me to say it face to face,
+about how I've left you all along.
+
+  slot  4  ( 15.78- 18.74)  sung: Now that Mother's Day is near it's easier for me to say
+            displayed: Now that Mother's Day is near,
+it's easier for me to say
+
+  slot  5  ( 18.74- 24.24)  sung: say how I feel in this song.
+            displayed: how I feel in this song.
+
+  slot  6  ( 24.24- 29.76)  sung: Those tender tears my mother shed for me.
+            displayed: Those tender tears my mother shed for me,
+
+  slot  7  ( 29.76- 35.68)  sung: For my hurt feelings she offered sympathy.
+            displayed: for my hurt feelings she offered sympathy.
+
+  slot  8  ( 35.68- 39.46)  sung: Through both the good times and the bad
+            displayed: Through both the good times and the bad,
+
+  slot  9  ( 39.46- 45.52)  sung: bad she was the one true friend I always had. When
+            displayed: she was the one true friend I always had.
+
+  slot 10  ( 45.52- 50.62)  sung: When I was scared she'd say it'll be alright.
+            displayed: When I was scared, she'd say it'll be alright.
+
+  slot 11  ( 50.62- 56.12)  sung: When I was sick she stayed up through the night.
+            displayed: When I was sick, she stayed up through the night.
+
+  slot 12  ( 56.12- 61.00)  sung: She kissed my sores and my tears away.
+            displayed: She kissed my sores and my tears away,
+
+  slot 13  ( 61.00- 66.86)  sung: Made time for me during her busy day.
+            displayed: made time for me during her busy day.
+
+  slot 14  ( 66.86- 71.10)  sung: She sheltered me from all harm
+            displayed: She sheltered me from all harm
+
+  slot 15  ( 71.10- 77.52)  sung: harm through the years. She kept me safe and warm.
+            displayed: through the years, she kept me safe and warm.
+
+  slot 16  ( 77.52- 82.12)  sung: When I was growing up she was always there.
+            displayed: When I was growing up, she was always there.
+
+  slot 17  ( 82.12- 87.26)  sung: When I was bad she was firm but fair.
+            displayed: When I was bad, she was firm but fair.
+
+  slot 18  ( 87.26- 92.14)  sung: She did her best to teach me right from wrong.
+            displayed: She did her best to teach me right from wrong.
+
+  slot 19  ( 92.14- 97.68)  sung: And now my heart carries her loving song. Thanks
+            displayed: And now my heart carries her loving song.
+
+  slot 20  ( 97.68-103.04)  sung: Thanks for loving what you gave to me.
+            displayed: Thanks for loving what you gave to me.
+
+  slot 21  (103.04-108.64)  sung: Thanks for not giving up when I was mean as I could be.
+            displayed: Thanks for not giving up when I was mean as I could be.
+
+  slot 22  (108.64-113.42)  sung: Mom I love you more than words can say.
+            displayed: Mom, I love you more than words can say.
+
+  slot 23  (113.42-119.18)  sung: And this is your song on Mother's Day.
+            displayed: And this is your song on Mother's Day.
+
+  slot 24  (119.18-124.83)  sung: (instrumental)
+            displayed: Happy Mother's Day, Mom

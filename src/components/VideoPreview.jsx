@@ -3,6 +3,51 @@ import { ArrowLeft, Play, Pause, RotateCcw, Download } from 'lucide-react';
 import useVideoStore from '../store/useVideoStore';
 import { lyricSlots, getCurrentSlot, getSlotProgress, SONG_DURATION } from '../utils/lyricsData';
 
+/**
+ * Word-wrap a single line of text to fit within `maxWidth`. Returns array of lines.
+ * Uses the canvas context's currently-set font for measurement.
+ */
+function wrapSingleLine(ctx, text, maxWidth) {
+    const words = text.split(/\s+/);
+    const lines = [];
+    let line = '';
+    for (const w of words) {
+        const next = line ? line + ' ' + w : w;
+        if (ctx.measureText(next).width <= maxWidth) {
+            line = next;
+        } else {
+            if (line) lines.push(line);
+            line = w;
+        }
+    }
+    if (line) lines.push(line);
+    return lines;
+}
+
+/**
+ * Split text on explicit \n then word-wrap each segment.
+ * Returns an array of display lines.
+ */
+function wrapLines(ctx, text, maxWidth) {
+    return text
+        .split('\n')
+        .flatMap((segment) => wrapSingleLine(ctx, segment.trim(), maxWidth));
+}
+
+/**
+ * Draw centered, vertically-balanced multi-line text. (cx, cy) is the center
+ * of the rendered block. Respects current font, fillStyle and textAlign.
+ */
+function drawWrappedText(ctx, text, cx, cy, maxWidth, lineHeight) {
+    const lines = wrapLines(ctx, text, maxWidth);
+    const startY = cy - ((lines.length - 1) * lineHeight) / 2;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    lines.forEach((line, i) => {
+        ctx.fillText(line, cx, startY + i * lineHeight);
+    });
+}
+
 const VideoPreview = () => {
     const setScreen = useVideoStore((state) => state.setScreen);
     const photos = useVideoStore((state) => state.photos);
@@ -13,8 +58,12 @@ const VideoPreview = () => {
     const isPlayingRef = useRef(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
-    const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
     const [loadedImages, setLoadedImages] = useState({});
+
+    // Derived: which slot is currently showing. Always consistent with
+    // currentTime so the "Now playing" text and the canvas overlay can never
+    // disagree at slot boundaries.
+    const currentSlot = getCurrentSlot(currentTime);
 
     // Preload all images
     useEffect(() => {
@@ -46,8 +95,6 @@ const VideoPreview = () => {
         const height = canvas.height;
 
         const slot = getCurrentSlot(time);
-        const slotIndex = lyricSlots.findIndex((s) => s.id === slot.id);
-        setCurrentSlotIndex(slotIndex);
 
         // Clear canvas with gradient
         const gradient = ctx.createLinearGradient(0, 0, 0, height);
@@ -177,8 +224,8 @@ const VideoPreview = () => {
             ctx.fillText('"', width / 2 - 300, height / 2 - 20);
 
             ctx.fillStyle = '#374151';
-            ctx.font = 'italic 48px Georgia, serif';
-            ctx.fillText(slot.lyric, width / 2, height / 2);
+            ctx.font = 'italic 44px Georgia, serif';
+            drawWrappedText(ctx, slot.lyric, width / 2, height / 2, width - 240, 56);
 
             ctx.fillStyle = '#9ca3af';
             ctx.font = '18px Inter, sans-serif';
@@ -301,16 +348,24 @@ const VideoPreview = () => {
             ctx.fillText('No photo for this scene', width / 2, height / 2);
         }
 
-        // Lyric overlay
+        // Lyric overlay (with auto word-wrap for long lines)
         if (slot.lyric) {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-            ctx.fillRect(0, height - 100, width, 100);
+            ctx.font = 'italic 32px Georgia, serif';
+            const lines = wrapLines(ctx, slot.lyric, width - 120);
+            const lineHeight = 40;
+            const padding = 24;
+            const barHeight = padding * 2 + lineHeight * lines.length;
+
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+            ctx.fillRect(0, height - barHeight, width, barHeight);
 
             ctx.fillStyle = '#FFFFFF';
-            ctx.font = 'italic 32px Georgia, serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(slot.lyric, width / 2, height - 50);
+            const startY = height - barHeight + padding + lineHeight / 2;
+            lines.forEach((line, i) => {
+                ctx.fillText(line, width / 2, startY + i * lineHeight);
+            });
         }
     }, [loadedImages, customTitle]);
 
@@ -419,7 +474,6 @@ const VideoPreview = () => {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    const currentSlot = lyricSlots[currentSlotIndex];
     const audioPath = import.meta.env.BASE_URL + 'audio/wendys_song.mp3';
     const progressPercent = (currentTime / SONG_DURATION) * 100;
 
@@ -482,7 +536,7 @@ const VideoPreview = () => {
                         <p className="text-[12px] font-semibold uppercase tracking-wider text-ink-500">
                             Now playing
                         </p>
-                        <p className="font-display text-[15px] italic text-ink-800">
+                        <p className="whitespace-pre-line font-display text-[15px] italic text-ink-800">
                             “{currentSlot?.editable ? customTitle : currentSlot?.lyric}”
                         </p>
                     </div>

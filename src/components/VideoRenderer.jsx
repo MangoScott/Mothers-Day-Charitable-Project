@@ -4,6 +4,39 @@ import useVideoStore from '../store/useVideoStore';
 import { lyricSlots } from '../utils/lyricsData';
 import { generateVideo, downloadBlob } from '../utils/ffmpegHelper';
 
+function wrapSingleLine(ctx, text, maxWidth) {
+    const words = text.split(/\s+/);
+    const lines = [];
+    let line = '';
+    for (const w of words) {
+        const next = line ? line + ' ' + w : w;
+        if (ctx.measureText(next).width <= maxWidth) {
+            line = next;
+        } else {
+            if (line) lines.push(line);
+            line = w;
+        }
+    }
+    if (line) lines.push(line);
+    return lines;
+}
+
+function wrapLines(ctx, text, maxWidth) {
+    return text
+        .split('\n')
+        .flatMap((segment) => wrapSingleLine(ctx, segment.trim(), maxWidth));
+}
+
+function drawWrappedText(ctx, text, cx, cy, maxWidth, lineHeight) {
+    const lines = wrapLines(ctx, text, maxWidth);
+    const startY = cy - ((lines.length - 1) * lineHeight) / 2;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    lines.forEach((line, i) => {
+        ctx.fillText(line, cx, startY + i * lineHeight);
+    });
+}
+
 const VideoRenderer = () => {
     const setScreen = useVideoStore((state) => state.setScreen);
     const photos = useVideoStore((state) => state.photos);
@@ -198,7 +231,53 @@ const VideoRenderer = () => {
                     ctx.fillStyle = bottomAccent;
                     ctx.fillRect(560, 660, 160, 3);
 
+                } else if (slot.type === 'narrative') {
+                    // Spoken-intro narrative slide (no photo, elegant centered text)
+                    const bgGradient = ctx.createRadialGradient(640, 360, 0, 640, 360, 900);
+                    bgGradient.addColorStop(0, 'rgba(252, 231, 243, 0.6)');
+                    bgGradient.addColorStop(0.5, 'rgba(253, 242, 248, 0.4)');
+                    bgGradient.addColorStop(1, 'rgba(255, 241, 242, 0.3)');
+                    ctx.fillStyle = bgGradient;
+                    ctx.fillRect(0, 0, 1280, 720);
+
+                    ctx.save();
+                    const heartPositions = [
+                        { x: 150, y: 180, size: 30, opacity: 0.1, rotation: -10 },
+                        { x: 1100, y: 200, size: 25, opacity: 0.08, rotation: 15 },
+                        { x: 180, y: 500, size: 22, opacity: 0.08, rotation: -20 },
+                        { x: 1120, y: 520, size: 28, opacity: 0.1, rotation: 10 },
+                    ];
+                    heartPositions.forEach(heart => {
+                        ctx.save();
+                        ctx.translate(heart.x, heart.y);
+                        ctx.rotate(heart.rotation * Math.PI / 180);
+                        ctx.globalAlpha = heart.opacity;
+                        ctx.fillStyle = '#ec4899';
+                        ctx.beginPath();
+                        const s = heart.size;
+                        ctx.moveTo(0, -s * 0.3);
+                        ctx.bezierCurveTo(s * 0.5, -s * 0.8, s, -s * 0.3, 0, s * 0.5);
+                        ctx.bezierCurveTo(-s, -s * 0.3, -s * 0.5, -s * 0.8, 0, -s * 0.3);
+                        ctx.fill();
+                        ctx.restore();
+                    });
+                    ctx.restore();
+
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = 'rgba(236, 72, 153, 0.15)';
+                    ctx.font = 'bold 200px Georgia, serif';
+                    ctx.fillText('"', 340, 340);
+
+                    ctx.fillStyle = '#374151';
+                    ctx.font = 'italic 44px Georgia, serif';
+                    drawWrappedText(ctx, slot.lyric, 640, 360, 1040, 56);
+
+                    ctx.fillStyle = '#9ca3af';
+                    ctx.font = '18px Inter, sans-serif';
+                    ctx.fillText('— spoken intro —', 640, 640);
+
                 } else {
+                    // Standard photo slot
                     const photoUrl = photos[slot.id];
                     if (photoUrl) {
                         try {
@@ -231,14 +310,22 @@ const VideoRenderer = () => {
                     }
 
                     if (slot.lyric) {
-                        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-                        ctx.fillRect(0, 620, 1280, 100);
+                        ctx.font = 'italic 32px Georgia, serif';
+                        const lines = wrapLines(ctx, slot.lyric, 1160);
+                        const lineHeight = 40;
+                        const padding = 24;
+                        const barHeight = padding * 2 + lineHeight * lines.length;
+
+                        ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+                        ctx.fillRect(0, 720 - barHeight, 1280, barHeight);
 
                         ctx.fillStyle = '#FFFFFF';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
-                        ctx.font = 'italic 32px Georgia, serif';
-                        ctx.fillText(slot.lyric, 640, 670);
+                        const startY = 720 - barHeight + padding + lineHeight / 2;
+                        lines.forEach((line, i) => {
+                            ctx.fillText(line, 640, startY + i * lineHeight);
+                        });
                     }
                 }
 

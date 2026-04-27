@@ -125,7 +125,7 @@ export default function LyricSlot({ slot, index }) {
                         </p>
                     </div>
                 ) : (
-                    <p className="font-display text-[15px] italic leading-relaxed text-ink-700">
+                    <p className="whitespace-pre-line font-display text-[15px] italic leading-relaxed text-ink-700">
                         “{slot.lyric}”
                     </p>
                 )}
