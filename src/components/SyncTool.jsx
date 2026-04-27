@@ -1,34 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Square, Save, RotateCcw, Check } from 'lucide-react';
+import { lyricSlots } from '../utils/lyricsData';
+
 const audioFile = import.meta.env.BASE_URL + 'audio/wendys_song.mp3';
 
-// The lyrics to sync — must match the 24 slots in lyricsData.js exactly
-const LYRICS_TO_SYNC = [
-    { type: 'intro', text: "A Mother's Day Story Card" },
-    { type: 'narrative', text: "Hi, mom, it's me" },
-    { type: 'narrative', text: "I couldn't find the words to say" },
-    { type: 'narrative', text: 'just how much you mean to me' },
-    { type: 'narrative', text: 'so I wrote down how I feel in this song' },
-    { type: 'verse', text: 'For my hurt feelings, she offered sympathy' },
-    { type: 'verse', text: 'Through both the good times and the bad' },
-    { type: 'verse', text: 'She was the one true friend I always had' },
-    { type: 'verse', text: 'When I was sick, she stayed up through the night' },
-    { type: 'verse', text: 'She kissed my sores and my tears away' },
-    { type: 'verse', text: 'Made time for me during her busy day' },
-    { type: 'verse', text: 'She sheltered me from all harm' },
-    { type: 'verse', text: 'Through the years' },
-    { type: 'verse', text: 'She kept me safe and warm' },
-    { type: 'verse', text: 'When I was growing up' },
-    { type: 'verse', text: 'She was always there' },
-    { type: 'verse', text: 'When I was bad, she was firm but fair' },
-    { type: 'verse', text: 'She did her best' },
-    { type: 'verse', text: 'To teach me right from wrong' },
-    { type: 'verse', text: 'And now my heart' },
-    { type: 'verse', text: 'Carries her loving song' },
-    { type: 'verse', text: 'My heart carries her loving song' },
-    { type: 'verse', text: 'Her loving song...' },
-    { type: 'outro', text: "Happy Mother's Day, Mom" },
-];
+// Source of truth: derive from the canonical lyric data so this dev tool
+// can never drift out of sync with the slots used by the player/renderer.
+const LYRICS_TO_SYNC = lyricSlots.map((s) => ({ type: s.type, text: s.lyric }));
 
 export default function SyncTool({ onBack }) {
     const [isPlaying, setIsPlaying] = useState(false);
